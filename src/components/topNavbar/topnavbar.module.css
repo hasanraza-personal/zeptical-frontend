@@ -1,0 +1,32 @@
+.single_item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 8px;
+}
+
+.single_item_active {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 8px;
+    background-color: #5B00FF;
+    color: #fff;
+}
+
+.single_item:hover {
+    background-color: #5B00FF;
+    color: #fff;
+}
+
+.top_navbar_container {
+    display: flex;
+    gap: 2px;
+    font-size: 18px;
+}
+
+.top_navbar_title {
+    font-family: var(--semiBold-font) !important;
+}

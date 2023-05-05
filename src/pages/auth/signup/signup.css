@@ -1,0 +1,33 @@
+.container {
+    padding: 10px 15px !important;
+}
+
+.tab {
+    width: 32% !important;
+    padding: 4px 4px !important;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+}
+
+.tab-panel {
+    padding: 4px 0 !important;
+    padding-top: 10px !important;
+}
+
+.bold-font {
+    font-family: var(--bold-font);
+}
+
+.semi-bold-font {
+    font-family: var(--semiBold-font);
+}
+
+.email-verification-title {
+    font-family: var(--semiBold-font);
+    font-size: 28px;
+}
+
+.email-verification-desc {
+    font-family: var(--semiBold-font);
+    color: var(--dark-grey-color);
+}

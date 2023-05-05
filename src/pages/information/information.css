@@ -1,0 +1,21 @@
+.container {
+    padding: 10px 15px !important;
+    margin-top: 5px;
+}
+
+.title {
+    font-family: var(--semiBold-font);
+    font-size: 17px;
+    line-height: normal;
+    text-align: left !important;
+}
+
+.desc {
+    font-size: 17px;
+    line-height: normal;
+}
+
+.accordion {
+    border: 1px solid #E2E8F0;
+    border-radius: 5px;
+}

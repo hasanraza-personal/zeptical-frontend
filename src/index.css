@@ -1,0 +1,63 @@
+@font-face {
+	font-family: "GoodTimesRg";
+	src: local("GoodTimesRg"),
+		url("./public/fonts/good-times/goodtimesrg.ttf") format("truetype");
+	font-weight: normal;
+}
+
+@font-face {
+	font-family: "Nunito-Regular";
+	src: local("Nunito-Regular"),
+		url("./public/fonts/nunito/Nunito-Regular.ttf") format("truetype");
+	font-weight: normal;
+}
+
+@font-face {
+	font-family: "Nunito-SemiBold";
+	src: local("Nunito-SemiBold"),
+		url("./public/fonts/nunito/Nunito-SemiBold.ttf") format("truetype");
+	font-weight: normal;
+}
+
+@font-face {
+	font-family: "Nunito-Bold";
+	src: local("Nunito-Bold"),
+		url("./public/fonts/nunito/Nunito-Bold.ttf") format("truetype");
+	font-weight: normal;
+}
+
+* {
+	font-family: Nunito-Regular;
+}
+
+:root {
+	--regular-font: 'Nunito-Regular';
+	--semiBold-font: 'Nunito-SemiBold';
+	--bold-font: 'Nunito-bold';
+	--dark-grey-color: #a3a3a3;
+}
+
+.zeptical-red-fill-button {
+	background-color: #eb3838 !important;
+	color: #fff !important;
+	font-family: var(--bold-font) !important;
+}
+
+.zeptical-red-fill-button:hover {
+	border: 1px solid #eb3838 !important;
+	background-color: #fff !important;
+	color: #eb3838 !important;
+}
+
+.input-focus:focus {
+	border: 1px solid #5B00FF !important;
+	box-shadow: 0 0 0 1px #5B00FF !important;
+}
+
+.sub-text {
+	color: var(--dark-grey-color);
+}
+
+.avoid-focus:focus-visible {
+	outline: none;
+}
