@@ -1,0 +1,33 @@
+.single_item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    position: relative;
+}
+
+.single_item_active {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #5B00FF;
+    position: relative;
+}
+
+.icon {
+    font-size: 26px;
+}
+
+.icon_button__badge {
+    position: absolute;
+    font-size: 12px;
+    top: 0px;
+    right: -5px;
+    width: 15px;
+    height: 15px;
+    background: red;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+}

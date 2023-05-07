@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import EmailInput from '../../../../../components/inputFields/emailInput/EmailInput'
 import PasswordInput from '../../../../../components/inputFields/passwordInput/PasswordInput';
 import { Box, Button, Flex, VStack, useToast } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { login } from '../../../../../slice/UserSlice';
@@ -15,6 +15,7 @@ const UserLoginForm = () => {
     const toast = useToast();
     const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const isValidEmail = (email) => {
         return /\S+@\S+\.\S+/.test(email);
@@ -72,7 +73,8 @@ const UserLoginForm = () => {
             });
             const data = response.data;
 
-            localStorage.setItem('token', data.authToken)
+            localStorage.setItem('token', data.authToken);
+            localStorage.setItem('type', "user");
             dispatch(login({
                 globalUserFullname: data.user.userFullname,
                 globalUsername: data.user.username,
@@ -81,8 +83,7 @@ const UserLoginForm = () => {
 
             setTimeout(() => {
                 setLoading(false)
-                // navigate('/home')
-                alert("Logged in successfull")
+                navigate('/user/home')
             }, 500)
         } catch (error) {
             setLoading(false);

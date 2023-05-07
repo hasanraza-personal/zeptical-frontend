@@ -1,21 +1,20 @@
 import React from 'react';
-import { TopNavbarItems } from './topNavbarItems';
-import { NavLink } from 'react-router-dom';
+import { BottomMobileNavbarItems } from './bottomMobileNavbarItems';
 import { Box, Flex, Icon } from '@chakra-ui/react';
-import styles from './topnavbar.module.css';
+import { NavLink } from 'react-router-dom';
+import styles from './bottommobilenavbar.module.css';
 
-const TopNavbar = () => {
+const BottomMobileNavbar = () => {
     return (
         <>
-            <Box className={styles.top_navbar_container}>
-                {TopNavbarItems.map((item, index) => (
+            <Box className={styles.bottom_navbar_container} boxShadow='xs'>
+                {BottomMobileNavbarItems.map((item, index) => (
                     <NavLink
                         key={index}
                         to={item.url}
                         className={(navData) => navData.isActive ? styles.single_item_active : styles.single_item}
                     >
                         <Icon as={item.icon} />
-                        <Box className={styles.top_navbar_title}>{item.title}</Box>
                     </NavLink>
                 ))}
             </Box>
@@ -23,4 +22,4 @@ const TopNavbar = () => {
     )
 }
 
-export default TopNavbar
+export default BottomMobileNavbar

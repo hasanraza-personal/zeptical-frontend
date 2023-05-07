@@ -1,0 +1,23 @@
+.bottom_navbar_container {
+    display: flex !important;
+    justify-content: space-between;
+    font-size: 25px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.single_item {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+}
+
+.single_item_active {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    border-top: 3px solid #5B00FF;
+    color: #5B00FF;
+    border-radius: 5px;
+}

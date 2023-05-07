@@ -11,7 +11,7 @@ import { useGoogleLogin } from '@react-oauth/google';
 const GoogleUserLogin = ({ props }) => {
     const dispatch = useDispatch();
     const toast = useToast();
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
 
     const handleGoogleLogin = useGoogleLogin({
         onSuccess: async tokenResponse => {
@@ -35,6 +35,7 @@ const GoogleUserLogin = ({ props }) => {
                     const data = response.data;
 
                     localStorage.setItem('token', data.authToken);
+                    localStorage.setItem('type', "user");
                     dispatch(login({
                         globalUserFullname: data.user.userFullname,
                         globalUsername: data.user.username,
@@ -44,8 +45,7 @@ const GoogleUserLogin = ({ props }) => {
                     if (data.userExist === false) {
                         props.setUserExistDB(false)
                     } else {
-                        // navigate('/home')
-                        alert("Google login successfull")
+                        navigate('/user/home')
                     }
 
                 } catch (error) {

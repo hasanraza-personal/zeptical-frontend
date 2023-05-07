@@ -1,6 +1,12 @@
-import { BoxArrowInRight, BoxArrowRight, CCircle, FileEarmarkText, Gear, InfoCircle, Key, PersonCircle, QuestionCircle, RCircle, Telephone } from 'react-bootstrap-icons';
+import { Bell, BoxArrowInRight, BoxArrowRight, CCircle, FileEarmarkText, Gear, InfoCircle, Key, PersonCircle, QuestionCircle, RCircle, Telephone } from 'react-bootstrap-icons';
 
 export const SideDrawerItems = [
+    {
+        icon: Bell,
+        title: 'Notification',
+        url: '/user/Notification',
+        auth: true
+    },
     {
         icon: RCircle,
         title: 'Register Startup',
@@ -16,7 +22,7 @@ export const SideDrawerItems = [
     {
         icon: Gear,
         title: 'Settings',
-        url: 'user/settings',
+        url: '/user/settings',
         auth: true
     },
     {
@@ -49,23 +55,17 @@ export const SideDrawerItems = [
         url: '/contactus',
         auth: 'not required'
     },
-    {
-        icon: BoxArrowRight,
-        title: 'Logout',
-        url: '/logout',
-        auth: true
-    },
 ]
 
-export const SideDrawerBottomItems = [
-    {
-        icon: FileEarmarkText,
-        title: 'Privacy Policy',
-        url: '/privacypolicy',
-    },
-    {
-        icon: Key,
-        title: 'Terms and Conditions',
-        url: '/termsandconditions',
-    },
-]
+// export const SideDrawerBottomItems = [
+//     {
+//         icon: FileEarmarkText,
+//         title: 'Privacy Policy',
+//         url: '/privacypolicy',
+//     },
+//     {
+//         icon: Key,
+//         title: 'Terms and Conditions',
+//         url: '/termsandconditions',
+//     },
+// ]

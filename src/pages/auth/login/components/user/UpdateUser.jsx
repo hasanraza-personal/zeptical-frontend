@@ -5,12 +5,14 @@ import SelectInput from '../../../../../components/inputFields/selectInput/Selec
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { login } from '../../../../../slice/UserSlice';
+import { useNavigate } from 'react-router-dom';
 
 const UpdateUser = () => {
     const dispatch = useDispatch();
     const user = useSelector((state) => state.user.value);
     const [loading, setLoading] = useState(false);
     const toast = useToast();
+    const navigate = useNavigate();
     const options = [
         {
             label: "Male",
@@ -70,7 +72,6 @@ const UpdateUser = () => {
                 }
             });
             const data = response.data
-            console.log('data: ', data);
 
             setTimeout(() => {
                 dispatch(login({
@@ -79,7 +80,7 @@ const UpdateUser = () => {
                     globalUserPhoto: data.user.userPhoto,
                 }))
                 setLoading(false)
-                alert("Google login successfull");
+                navigate('/user/home')
             }, 500)
         } catch (error) {
             setLoading(false)

@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { login } from '../../../../../slice/UserSlice';
 import OTPExpired from './OTPExpired';
+import { useNavigate } from 'react-router-dom';
 
 const EmailVerificationForm = ({ props }) => {
     const [userOTP, setUserOTP] = useState(null);
@@ -13,6 +14,7 @@ const EmailVerificationForm = ({ props }) => {
     const [otpExpired, setOTPExpired] = useState(false);
     const toast = useToast();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -47,7 +49,8 @@ const EmailVerificationForm = ({ props }) => {
                 return
             }
 
-            localStorage.setItem('token', data.authToken)
+            localStorage.setItem('token', data.authToken);
+            localStorage.setItem('type', "user");
             dispatch(login({
                 globalUserFullname: data.user.userFullname,
                 globalUsername: data.user.username,
@@ -56,8 +59,7 @@ const EmailVerificationForm = ({ props }) => {
 
             setTimeout(() => {
                 setLoading(false)
-                alert("Sign up successfull")
-                // navigate('/home')
+                navigate('/user/home')
             }, 500)
         } catch (error) {
             setLoading(false)

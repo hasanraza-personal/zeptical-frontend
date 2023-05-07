@@ -1,20 +1,28 @@
-import { Box, Button, Divider, Drawer, DrawerContent, DrawerOverlay, Flex, Icon, Image } from '@chakra-ui/react';
+import { Badge, Box, Button, Divider, Drawer, DrawerContent, DrawerOverlay, Flex, Icon, Image } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import LazyLoad from 'react-lazy-load';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import Logo from '../../../public/images/logo.png';
 import styles from './sidedrawer.module.css';
 import { SideDrawerItems } from './sideDrawerItems';
-import { SideDrawerBottomItems } from './sideDrawerItems';
+import { BoxArrowRight } from 'react-bootstrap-icons';
+// import { SideDrawerBottomItems } from './sideDrawerItems';
 
 const SideDrawer = ({ props }) => {
     const btnRef = React.useRef();
     const [auth, setAuth] = useState(false);
+    const navigate = useNavigate();
 
     const hanldeCloseDrawer = () => {
         setTimeout(() => {
             props.closeSideDrawer();
         }, 100)
+    }
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        navigate('/login');
     }
 
     useEffect(() => {
@@ -43,7 +51,7 @@ const SideDrawer = ({ props }) => {
                     {auth &&
                         <>
                             <NavLink
-                                to='user/profile'
+                                to='/user/profile'
                                 className={(navData) => navData.isActive ? styles.user_active : styles.user}
                             >
                                 <Flex as={LazyLoad} alignItems='center'>
@@ -71,11 +79,16 @@ const SideDrawer = ({ props }) => {
                             >
                                 <Icon as={item.icon} />
                                 <Box className={styles.side_drawer_title}>{item.title}</Box>
+                                {item.title === 'Notification' && <Badge colorScheme="green">4</Badge>}
                             </NavLink>
                         ))}
+                        <Flex className={styles.single_item} cursor='pointer' onClick={handleLogout}>
+                            <Icon as={BoxArrowRight} />
+                            <Box className={styles.side_drawer_title}>Logout</Box>
+                        </Flex>
                     </Box>
 
-                    <Box className={styles.sidebar_drawer_bottom_border_container} />
+                    {/* <Box className={styles.sidebar_drawer_bottom_border_container} />
 
                     <Box className={styles.side_drawer_bottom_link}>
                         {SideDrawerBottomItems.map((item, index) => (
@@ -88,7 +101,7 @@ const SideDrawer = ({ props }) => {
                                 <Box className={styles.side_drawer_title}>{item.title}</Box>
                             </NavLink>
                         ))}
-                    </Box>
+                    </Box> */}
                 </DrawerContent>
             </Drawer>
         </>
