@@ -21,11 +21,10 @@ const RightSidebar = () => {
 
                 <Box>
                     <Flex as={LazyLoad} justifyContent='center' mt={20}>
-                        <Image src={comingSoonImage} w={200} />
+                        <Image src={comingSoonImage} w={180} />
                     </Flex>
-                    <Box mt={10}>
-                        <Flex className={styles.coming_soon_title_1}>21 Days Challenge</Flex>
-                        <Flex className={styles.coming_soon_title_2}>Coming Soon</Flex>
+                    <Box mt={8}>
+                        <Flex className={styles.coming_soon_title_1}>Coming Soon</Flex>
                     </Box>
                 </Box>
             </Box>

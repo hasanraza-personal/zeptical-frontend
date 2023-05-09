@@ -1,4 +1,4 @@
-import { Badge, Box, Button, Divider, Drawer, DrawerContent, DrawerOverlay, Flex, Icon, Image } from '@chakra-ui/react';
+import { Badge, Box, Drawer, DrawerContent, DrawerOverlay, Flex, Icon, Image } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import LazyLoad from 'react-lazy-load';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
@@ -6,12 +6,14 @@ import Logo from '../../../public/images/logo.png';
 import styles from './sidedrawer.module.css';
 import { SideDrawerItems } from './sideDrawerItems';
 import { BoxArrowRight } from 'react-bootstrap-icons';
+import { useSelector } from 'react-redux';
 // import { SideDrawerBottomItems } from './sideDrawerItems';
 
 const SideDrawer = ({ props }) => {
     const btnRef = React.useRef();
     const [auth, setAuth] = useState(false);
     const navigate = useNavigate();
+    const globalUser = useSelector((state) => state.user.value);
 
     const hanldeCloseDrawer = () => {
         setTimeout(() => {
@@ -23,13 +25,17 @@ const SideDrawer = ({ props }) => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         navigate('/login');
+
+        setTimeout(() => {
+            props.closeSideDrawer();
+        }, 100)
     }
 
     useEffect(() => {
         if (localStorage.getItem('token')) {
             setAuth(true);
         }
-    }, [localStorage.getItem('token')])
+    }, [globalUser])
 
     return (
         <>

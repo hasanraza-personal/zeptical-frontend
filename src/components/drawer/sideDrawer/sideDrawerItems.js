@@ -1,4 +1,4 @@
-import { Bell, BoxArrowInRight, BoxArrowRight, CCircle, FileEarmarkText, Gear, InfoCircle, Key, PersonCircle, QuestionCircle, RCircle, Telephone } from 'react-bootstrap-icons';
+import { Bell, BoxArrowInRight, CCircle, Gear, InfoCircle, PersonCircle, QuestionCircle, RCircle, Telephone } from 'react-bootstrap-icons';
 
 export const SideDrawerItems = [
     {
@@ -15,7 +15,7 @@ export const SideDrawerItems = [
     },
     {
         icon: CCircle,
-        title: '21 Days Challange',
+        title: 'Coming Soon',
         url: '/challange',
         auth: true
     },

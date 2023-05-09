@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Box, Icon } from '@chakra-ui/react';
+import { Icon } from '@chakra-ui/react';
 import styles from './topmobilenavbar.module.css'
 import { Envelope } from 'react-bootstrap-icons';
 

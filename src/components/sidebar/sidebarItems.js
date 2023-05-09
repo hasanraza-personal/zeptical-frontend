@@ -1,4 +1,4 @@
-import { Bell, Book, BoxArrowRight, CCircle, Envelope, Gear, House, InfoCircle, Newspaper, PersonCircle, QuestionCircle, RCircle, Search, Telephone } from 'react-bootstrap-icons';
+import { Bell, Book, CCircle, Envelope, Gear, House, InfoCircle, Newspaper, QuestionCircle, RCircle, Search, Telephone } from 'react-bootstrap-icons';
 
 export const SidebarNavItems = [
     {
@@ -29,7 +29,6 @@ export const SidebarNavItems = [
     {
         icon: Bell,
         title: 'Notification',
-        title: 'Notification',
         url: '/user/Notification',
     },
     {
@@ -39,7 +38,7 @@ export const SidebarNavItems = [
     },
     {
         icon: CCircle,
-        title: '21 Days Challange',
+        title: 'Coming Soon',
         url: '/challange',
     },
     {

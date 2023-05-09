@@ -55,7 +55,7 @@ const UserResetPassword = () => {
         setLoading(true)
 
         try {
-            let response = await axios({
+            await axios({
                 method: 'POST',
                 url: '/api/user/auth/resetpassword',
                 headers: {
@@ -68,7 +68,6 @@ const UserResetPassword = () => {
                     urlTime
                 }
             });
-            const data = response.data
 
             setTimeout(() => {
                 setLoading(false)

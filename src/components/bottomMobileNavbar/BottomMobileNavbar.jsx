@@ -1,6 +1,6 @@
 import React from 'react';
 import { BottomMobileNavbarItems } from './bottomMobileNavbarItems';
-import { Box, Flex, Icon } from '@chakra-ui/react';
+import { Box, Icon } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
 import styles from './bottommobilenavbar.module.css';
 

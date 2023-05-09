@@ -96,7 +96,7 @@ const UpdateUser = () => {
 
     useEffect(() => {
         setCredentials({ ...credentials, username: user.globalUsername })
-    }, [user])
+    }, [user, credentials])
 
     return (
         <>

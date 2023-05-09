@@ -1,7 +1,7 @@
 import React from 'react';
 import { TopNavbarItems } from './topNavbarItems';
 import { NavLink } from 'react-router-dom';
-import { Box, Flex, Icon } from '@chakra-ui/react';
+import { Box, Icon } from '@chakra-ui/react';
 import styles from './topnavbar.module.css';
 
 const TopNavbar = () => {

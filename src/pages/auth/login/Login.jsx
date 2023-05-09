@@ -5,11 +5,11 @@ import { CurrencyRupee, Person, PersonVideo3 } from 'react-bootstrap-icons';
 import GoogleUserLogin from './components/user/GoogleUserLogin';
 import UserLoginInformation from './components/user/UserLoginInformation';
 import UserLoginForm from './components/user/UserLoginForm';
-import { Helmet } from 'react-helmet-async';
+// import { Helmet } from 'react-helmet-async';
 import UpdateUser from './components/user/UpdateUser';
 
 const Login = () => {
-    const [mobileScreen] = useMediaQuery('(min-width: 850px)');
+    const [mobileScreen] = useMediaQuery('(max-width: 850px)');
     const [userExistDB, setUserExistDB] = useState(null);
 
     const tabHead = [
@@ -29,14 +29,14 @@ const Login = () => {
 
     return (
         <>
-            <Helmet>
+            {/* <Helmet>
                 <title>Zeptical - Login or Signup</title>
                 <meta name="description" content="Create an account or log into Zeptical." />
                 <link rel='canonical' href='https://zeptical.com/login' />
                 <meta name="keywords" content="Startup, Mentor, Investor, Collaborator, Social, Business, Idea, Product, Courage, Consistence, Hard Work, Motivation, Team, Friends, Social, Achievement" />
-            </Helmet>
+            </Helmet> */}
 
-            <Container className='container' boxShadow={mobileScreen && 'xs'} mt={mobileScreen && 5} maxW='md'>
+            <Container className='container' boxShadow={!mobileScreen && 'xs'} mt={!mobileScreen && 5} maxW='md'>
                 {userExistDB !== false &&
                     <Box fontSize={22} className='bold-font' userSelect='none'>Login as,</Box>
                 }

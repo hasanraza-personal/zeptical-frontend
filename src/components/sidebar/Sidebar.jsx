@@ -6,11 +6,15 @@ import { SidebarNavItems } from './sidebarItems';
 import LazyLoad from 'react-lazy-load';
 import Logo from '../../public/images/logo.png';
 import { BoxArrowRight } from 'react-bootstrap-icons';
+import { logout } from '../../slice/UserSlice';
+import { useDispatch } from 'react-redux';
 
 const Sidebar = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleLogout = () => {
+        dispatch(logout({}))
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         navigate('/login');

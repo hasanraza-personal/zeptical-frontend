@@ -5,7 +5,7 @@ import './userforgotpassword.css';
 import forgotPasswordImage from '../../../../public/images/undraw/forgot_password.svg';
 import LazyLoad from 'react-lazy-load';
 import EmailInput from '../../../../components/inputFields/emailInput/EmailInput';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import PreviousLocation from '../../../../components/previousLocation/PreviousLocation';
 import axios from 'axios';
 
@@ -15,7 +15,7 @@ const UserForgotPassword = () => {
         userEmail: ""
     });
     const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const toast = useToast();
 
     const onChange = (e) => {

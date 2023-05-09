@@ -1,5 +1,5 @@
 import { Flex, Box, Image, useToast } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React from 'react';
 import LazyLoad from 'react-lazy-load';
 import googleIconImage from '../../../../../public/images/google_icon.svg';
 import { useDispatch } from 'react-redux';

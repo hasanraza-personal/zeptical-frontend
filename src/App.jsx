@@ -1,11 +1,11 @@
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Header from './components/header/Header';
 import SystemLoader from './components/loader/systemLoader/SystemLoader';
 import BottomMobileNavbar from './components/bottomMobileNavbar/BottomMobileNavbar';
 import { useMediaQuery, useToast } from '@chakra-ui/react';
 import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { login } from './slice/UserSlice';
 import { AuthRoutes, GeneralRoutes } from './helper/ProtectedRoutes';
 
@@ -22,7 +22,6 @@ function App() {
 	const [mobileScreen] = useMediaQuery('(min-width: 850px)');
 	const dispatch = useDispatch();
 	const toast = useToast();
-	const [user, setUser] = useState(false);
 
 	const fetchUser = async () => {
 		try {
@@ -37,9 +36,9 @@ function App() {
 			const data = response.data.user
 			if (data) {
 				dispatch(login({
-					globalUserFullname: data.userfullname,
+					globalUserFullname: data.userFullname,
 					globalUsername: data.username,
-					globalUserPhoto: data.userphoto
+					globalUserPhoto: data.userPhoto
 				}))
 			}
 		} catch (error) {
@@ -56,7 +55,6 @@ function App() {
 	useEffect(() => {
 		if (localStorage.getItem('token')) {
 			fetchUser()
-			setUser(true)
 		}
 		// eslint-disable-next-line
 	}, [])
