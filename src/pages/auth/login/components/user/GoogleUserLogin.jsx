@@ -34,17 +34,21 @@ const GoogleUserLogin = ({ props }) => {
                     });
                     const data = response.data;
 
-                    localStorage.setItem('token', data.authToken);
-                    localStorage.setItem('type', "user");
-                    dispatch(login({
-                        globalUserFullname: data.user.userFullname,
-                        globalUsername: data.user.username,
-                        globalUserPhoto: data.user.userPhoto
-                    }))
-
                     if (data.userExist === false) {
-                        props.setUserExistDB(false)
+                        props.setIsNewGoogleUser(false);
+                        props.setNewGoogleUserData({
+                            token: data.authToken,
+                            username: data.user.username
+                        })
                     } else {
+                        localStorage.setItem('token', data.authToken);
+                        localStorage.setItem('type', "user");
+                        dispatch(login({
+                            globalUserFullname: data.user.userFullname,
+                            globalUsername: data.user.username,
+                            globalUserPhoto: data.user.userPhoto
+                        }))
+
                         navigate('/user/home')
                     }
 

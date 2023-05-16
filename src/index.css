@@ -63,27 +63,20 @@
 	outline: none;
 }
 
-/* Common 3 sections */
-._container {
-	justify-content: space-between;
-}
-
-.sidebar_parent_container {
-	width: 320px;
-	height: 100vh;
-}
-
-.middle_container {
-	/* border: 1px solid red; */
-}
-
-.right_parent_container {
-	height: 100vh;
+._main_container {
+	display: flex;
+	gap: 20px;
+	padding: 2vh 0;
 }
 
 ._page_title {
 	font-family: var(--bold-font) !important;
 	font-size: 28px;
-	padding: 10px 15px;
+	/* padding: 10px 15px; */
 }
+
+.container-divider {
+	margin: 8px 0;
+}
+
 /* ----------------- */

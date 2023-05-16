@@ -136,7 +136,6 @@ const UserSignupForm = ({ props }) => {
                 }
             });
             const data = response.data
-            console.log('data: ', data);
 
             setTimeout(() => {
                 setLoading(false)

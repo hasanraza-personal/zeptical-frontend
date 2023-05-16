@@ -1,11 +1,12 @@
 .sidebar_container {
-    position: sticky;
-    width: 100%;
-    height: 100vh;
+    height: 96vh;
+    border-radius: 20px;
+    padding: 15px 20px;
+    /* position: fixed; */
 }
 
 .sidebar_drawer_link {
-    padding: 0 15px;
+    padding: 0 0px;
 }
 
 .single_item {
@@ -58,6 +59,7 @@
     border-radius: 50%;
     width: 55px;
     height: 55px;
+    object-fit: cover;
 }
 
 .side_drawer_user_name {

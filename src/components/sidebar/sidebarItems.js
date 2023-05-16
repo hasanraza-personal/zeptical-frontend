@@ -36,11 +36,11 @@ export const SidebarNavItems = [
         title: 'Register Startup',
         url: '/registerstartup',
     },
-    {
-        icon: CCircle,
-        title: 'Coming Soon',
-        url: '/challange',
-    },
+    // {
+    //     icon: CCircle,
+    //     title: 'Coming Soon',
+    //     url: '/challange',
+    // },
     {
         icon: Gear,
         title: 'Settings',

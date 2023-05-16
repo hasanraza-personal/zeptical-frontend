@@ -1,0 +1,17 @@
+.uploader_input {
+	width: 90px !important;
+	height: 90px !important;
+	border-radius: 5px !important;
+	position: absolute !important;
+	opacity: 0 !important;
+	cursor: pointer;
+}
+
+
+.uploader_mask {
+	border-radius: 50% !important;
+	height: 100px !important;
+	width: 100% !important;
+	border: 2px dashed #5B00FF;
+	cursor: pointer;
+}

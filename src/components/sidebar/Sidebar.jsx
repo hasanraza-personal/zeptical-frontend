@@ -7,11 +7,12 @@ import LazyLoad from 'react-lazy-load';
 import Logo from '../../public/images/logo.png';
 import { BoxArrowRight } from 'react-bootstrap-icons';
 import { logout } from '../../slice/UserSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Sidebar = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const user = useSelector((state) => state.user.value);
 
     const handleLogout = () => {
         dispatch(logout({}))
@@ -22,7 +23,7 @@ const Sidebar = () => {
 
     return (
         <>
-            <Box className={styles.sidebar_container} boxShadow='xs'>
+            <Box className={styles.sidebar_container} boxShadow='base'>
                 <Flex as={Link} to='/' className='avoid-focus' p='10px 15px'>
                     <Flex as={LazyLoad} alignItems='center'>
                         <Image src={Logo} alt='Logo' w={10} h={10} />
@@ -35,11 +36,11 @@ const Sidebar = () => {
                     className={(navData) => navData.isActive ? styles.user_active : styles.user}
                 >
                     <Flex as={LazyLoad} alignItems='center'>
-                        <Image src='https://bit.ly/dan-abramov' className={styles.side_drawer_user_photo} alt='Profile photo' />
+                        <Image src={user.globalUserPhoto} className={styles.side_drawer_user_photo} alt='Profile photo' />
                     </Flex>
                     <Flex className={styles.side_drawer_user_text}>
-                        <Box className={styles.side_drawer_user_name}>Khan Hasan Raza</Box>
-                        <Box className={styles.side_drawer_user_username}>hkhan5242</Box>
+                        <Box className={styles.side_drawer_user_name}>{user.globalUserFullname}</Box>
+                        <Box className={styles.side_drawer_user_username}>{user.globalUsername}</Box>
                     </Flex>
                 </NavLink>
 

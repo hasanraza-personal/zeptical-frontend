@@ -67,6 +67,7 @@
     border-radius: 50%;
     width: 55px;
     height: 55px;
+    object-fit: cover;
 }
 
 .side_drawer_user_name {

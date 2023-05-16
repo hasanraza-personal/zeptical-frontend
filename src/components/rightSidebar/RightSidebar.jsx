@@ -8,8 +8,8 @@ import LazyLoad from 'react-lazy-load';
 const RightSidebar = () => {
     return (
         <>
-            <Box className={styles.right_container} boxShadow='xs'>
-                <Box p='10px 15px'>
+            <Box className={styles.right_container} boxShadow='base'>
+                <Box p='10px 0px'>
                     <InputGroup>
                         <InputLeftElement
                             pointerEvents='none'

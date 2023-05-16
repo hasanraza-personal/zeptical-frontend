@@ -2,14 +2,13 @@ import { Box, Button, VStack, useToast } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import TextInput from '../../../../../components/inputFields/textInput/TextInput';
 import SelectInput from '../../../../../components/inputFields/selectInput/SelectInput';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { login } from '../../../../../slice/UserSlice';
 import { useNavigate } from 'react-router-dom';
 
-const UpdateUser = () => {
+const UpdateUser = ({ props }) => {
     const dispatch = useDispatch();
-    const user = useSelector((state) => state.user.value);
     const [loading, setLoading] = useState(false);
     const toast = useToast();
     const navigate = useNavigate();
@@ -64,7 +63,7 @@ const UpdateUser = () => {
                 url: '/api/user/auth/updateuser',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${props.newGoogleUserData.token}`
                 },
                 data: {
                     username: credentials.username,
@@ -74,11 +73,14 @@ const UpdateUser = () => {
             const data = response.data
 
             setTimeout(() => {
+                localStorage.setItem('token', data.authToken);
+                localStorage.setItem('type', "user");
                 dispatch(login({
-                    ...user,
+                    globalUserFullname: data.user.userFullname,
                     globalUsername: data.user.username,
-                    globalUserPhoto: data.user.userPhoto,
+                    globalUserPhoto: data.user.userPhoto
                 }))
+
                 setLoading(false)
                 navigate('/user/home')
             }, 500)
@@ -95,8 +97,10 @@ const UpdateUser = () => {
     }
 
     useEffect(() => {
-        setCredentials({ ...credentials, username: user.globalUsername })
-    }, [user, credentials])
+        setCredentials({ ...credentials, username: props.newGoogleUserData.username })
+
+        // eslint-disable-next-line
+    }, [])
 
     return (
         <>

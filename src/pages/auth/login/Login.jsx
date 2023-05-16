@@ -10,7 +10,8 @@ import UpdateUser from './components/user/UpdateUser';
 
 const Login = () => {
     const [mobileScreen] = useMediaQuery('(max-width: 850px)');
-    const [userExistDB, setUserExistDB] = useState(null);
+    const [isNewGoogleUser, setIsNewGoogleUser] = useState(null);
+    const [newGoogleUserData, setNewGoogleUserData] = useState({});
 
     const tabHead = [
         {
@@ -37,52 +38,55 @@ const Login = () => {
             </Helmet> */}
 
             <Container className='container' boxShadow={!mobileScreen && 'xs'} mt={!mobileScreen && 5} maxW='md'>
-                {userExistDB !== false &&
-                    <Box fontSize={22} className='bold-font' userSelect='none'>Login as,</Box>
+                {isNewGoogleUser === null ?
+                    <>
+                        <Box fontSize={22} className='bold-font' userSelect='none'>Login as,</Box>
+
+                        <Tabs variant='unstyled' mt={2}>
+                            <Flex as={TabList} justifyContent='space-between'>
+                                {tabHead.map((data, index) => (
+                                    <Tab key={index} _selected={{ color: '#5B00FF', border: '1px solid #5B00FF' }} className='tab'>
+                                        <Flex alignItems='center' gap={1.5} fontSize={16}>
+                                            <Icon as={data.icon} />
+                                            <Box fontFamily='Nunito-Bold'>{data.title}</Box>
+                                        </Flex>
+                                    </Tab>
+                                ))}
+                            </Flex>
+
+                            <TabPanels>
+                                <TabPanel className='tab-panel'>
+                                    <UserLoginInformation />
+
+                                    <GoogleUserLogin props={{
+                                        setIsNewGoogleUser,
+                                        setNewGoogleUserData
+                                    }} />
+
+                                    {/* This box is used for vertical spacing */}
+                                    <Box mt={6} />
+
+                                    <Box className='line-text'>
+                                        <span>OR</span>
+                                    </Box>
+
+                                    <UserLoginForm />
+
+                                </TabPanel>
+                                <TabPanel>
+                                    <p>Mentor login</p>
+                                </TabPanel>
+
+                                <TabPanel>
+                                    <p>Investor login</p>
+                                </TabPanel>
+                            </TabPanels>
+                        </Tabs>
+                    </>
+                    : <>
+                        <UpdateUser props={{ newGoogleUserData }} />
+                    </>
                 }
-                <Tabs variant='unstyled' mt={2}>
-                    {userExistDB !== false &&
-                        <Flex as={TabList} justifyContent='space-between'>
-                            {tabHead.map((data, index) => (
-                                <Tab key={index} _selected={{ color: '#5B00FF', border: '1px solid #5B00FF' }} className='tab'>
-                                    <Flex alignItems='center' gap={1.5} fontSize={16}>
-                                        <Icon as={data.icon} />
-                                        <Box fontFamily='Nunito-Bold'>{data.title}</Box>
-                                    </Flex>
-                                </Tab>
-                            ))}
-                        </Flex>
-                    }
-                    <TabPanels>
-                        <TabPanel className='tab-panel'>
-                            {userExistDB !== false ? <>
-                                <UserLoginInformation />
-
-                                <GoogleUserLogin props={{
-                                    setUserExistDB: setUserExistDB
-                                }} />
-
-                                {/* This box is used for vertical spacing */}
-                                <Box mt={6} />
-
-                                <Box className='line-text'>
-                                    <span>OR</span>
-                                </Box>
-
-                                <UserLoginForm />
-                            </> : <>
-                                <UpdateUser />
-                            </>}
-                        </TabPanel>
-                        <TabPanel>
-                            <p>Mentor login</p>
-                        </TabPanel>
-
-                        <TabPanel>
-                            <p>Investor login</p>
-                        </TabPanel>
-                    </TabPanels>
-                </Tabs>
             </Container >
         </>
     )

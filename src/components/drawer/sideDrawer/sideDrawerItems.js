@@ -13,12 +13,12 @@ export const SideDrawerItems = [
         url: '/registerstartup',
         auth: true
     },
-    {
-        icon: CCircle,
-        title: 'Coming Soon',
-        url: '/challange',
-        auth: true
-    },
+    // {
+    //     icon: CCircle,
+    //     title: 'Coming Soon',
+    //     url: '/challange',
+    //     auth: true
+    // },
     {
         icon: Gear,
         title: 'Settings',

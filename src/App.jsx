@@ -1,13 +1,15 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Header from './components/header/Header';
 import SystemLoader from './components/loader/systemLoader/SystemLoader';
 import BottomMobileNavbar from './components/bottomMobileNavbar/BottomMobileNavbar';
-import { useMediaQuery, useToast } from '@chakra-ui/react';
+import { Box, Container, Flex, useMediaQuery, useToast } from '@chakra-ui/react';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { login } from './slice/UserSlice';
 import { AuthRoutes, GeneralRoutes } from './helper/ProtectedRoutes';
+import Sidebar from './components/sidebar/Sidebar';
+import RightSidebar from './components/rightSidebar/RightSidebar';
 
 const Index = React.lazy(() => import('./pages/index/Index'));
 const Login = React.lazy(() => import('./pages/auth/login/Login'));
@@ -17,11 +19,15 @@ const UserResetPassword = React.lazy(() => import('./pages/auth/resetPassword/us
 const Signup = React.lazy(() => import('./pages/auth/signup/Signup'));
 const UserHome = React.lazy(() => import('./pages/user/home/Home'));
 const UserProfile = React.lazy(() => import('./pages/user/profile/Profile'));
+const EditUserProfile = React.lazy(() => import('./pages/user/profile/editProfile/EditProfile'));
+const EditCollaborator = React.lazy(() => import('./pages/user/profile/collaborator/components/edit/EditCollaborator'))
 
 function App() {
-	const [mobileScreen] = useMediaQuery('(min-width: 850px)');
+	const [mobileScreen] = useMediaQuery('(max-width: 850px)');
+	const user = useSelector((state) => state.user.value);
 	const dispatch = useDispatch();
 	const toast = useToast();
+	const [isUser, setIsUser] = useState(null);
 
 	const fetchUser = async () => {
 		try {
@@ -59,41 +65,65 @@ function App() {
 		// eslint-disable-next-line
 	}, [])
 
+	useEffect(() => {
+		if (user.globalUsername) {
+			setIsUser(true);
+		} else {
+			setIsUser(false);
+		}
+	}, [user.globalUsername])
+
 	return (
 		<>
 			<Header />
-			<Suspense fallback={<SystemLoader />}>
-				<Routes>
-					<Route element={<GeneralRoutes />}>
-						<Route path='/' element={<Index />} />
-						<Route path='/login' element={<Login />} />
-						<Route path='user/forgotpassword' element={<UserForgotPassword />} />
-						<Route path='/user/resetpassword' element={<UserResetPassword />} />
-						<Route path='/signup' element={<Signup />} />
-					</Route>
+			<Container
+				maxW='container.xl'
+				as={!mobileScreen && Flex}
+				gap={!mobileScreen && '20px'}
+				padding={!mobileScreen ? '2vh 0' : 0}
+			>
+				{!mobileScreen && isUser &&
+					<Sidebar />
+				}
+
+				<Suspense fallback={<SystemLoader />}>
+					<Routes>
+						<Route element={<GeneralRoutes />}>
+							<Route path='/' element={<Index />} />
+							<Route path='/login' element={<Login />} />
+							<Route path='user/forgotpassword' element={<UserForgotPassword />} />
+							<Route path='/user/resetpassword' element={<UserResetPassword />} />
+							<Route path='/signup' element={<Signup />} />
+						</Route>
 
 
-					<Route path='/information' element={<Information />} />
+						<Route path='/information' element={<Information />} />
 
-					<Route element={<AuthRoutes />}>
-						{/* <Route path='/user/home' element={<UserHome />} /> */}
+						<Route element={<AuthRoutes />}>
+							{/* <Route path='/user/home' element={<UserHome />} /> */}
 
-						<Route path='/user' >
-							<Route path='home' element={<UserHome />} />
-							<Route path='profile' element={<UserProfile />} />
-
-							{/* <Route path='collaborator' element={<CollaboratorProfile />} />
-							<Route path='createcollaborator' element={<CreateCollaborator />} />
+							<Route path='/user' >
+								<Route path='home' element={<UserHome />} />
+								<Route path='profile' element={<UserProfile />} errorElement={<UserHome />} />
+								<Route path='editprofile' element={<EditUserProfile />} />
+								<Route path='editcollaborator' element={<EditCollaborator />} />
+								{/* <Route path='collaborator' element={<CollaboratorProfile />} />
 
 							<Route path='startupidea' element={<StartupIdeaProfile />} />
 							<Route path='createstartupidea' element={<CreateStartupIdea />} /> 
 							<Route path='editprofile' element={<EditProfileHead />} /> */}
-						</Route>
+							</Route>
 
-					</Route>
-				</Routes>
-			</Suspense>
-			{!mobileScreen &&
+						</Route>
+					</Routes>
+				</Suspense>
+
+				{!mobileScreen && isUser &&
+					<RightSidebar />
+				}
+			</Container>
+
+			{mobileScreen && isUser &&
 				<BottomMobileNavbar />
 			}
 		</>

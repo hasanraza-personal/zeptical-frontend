@@ -55,7 +55,7 @@ const EmailVerificationForm = ({ props }) => {
                 globalUserFullname: data.user.userFullname,
                 globalUsername: data.user.username,
                 globalUserPhoto: data.user.userPhoto
-            }))
+            }));
 
             setTimeout(() => {
                 setLoading(false)

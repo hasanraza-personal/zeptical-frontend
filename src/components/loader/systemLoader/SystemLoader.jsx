@@ -1,12 +1,12 @@
 import { Flex } from '@chakra-ui/react';
 import React from 'react';
-import './systemloader.css';
+import styles from './systemloader.module.css';
 
 const SystemLoader = () => {
     return (
         <>
-            <Flex justifyContent='center' mt={20}>
-                <span className="loader"></span>
+            <Flex justifyContent='center' margin='auto' mt={20}>
+                <span className={styles.loader}></span>
             </Flex>
         </>
     )

@@ -6,14 +6,16 @@ import Logo from '../../../public/images/logo.png';
 import styles from './sidedrawer.module.css';
 import { SideDrawerItems } from './sideDrawerItems';
 import { BoxArrowRight } from 'react-bootstrap-icons';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../../slice/UserSlice';
 // import { SideDrawerBottomItems } from './sideDrawerItems';
 
 const SideDrawer = ({ props }) => {
     const btnRef = React.useRef();
-    const [auth, setAuth] = useState(false);
     const navigate = useNavigate();
-    const globalUser = useSelector((state) => state.user.value);
+    const user = useSelector((state) => state.user.value);
+    const dispatch = useDispatch();
+    const [isUser, setIsUser] = useState(null);
 
     const hanldeCloseDrawer = () => {
         setTimeout(() => {
@@ -24,6 +26,8 @@ const SideDrawer = ({ props }) => {
     const handleLogout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
+        dispatch(logout({}))
+
         navigate('/login');
 
         setTimeout(() => {
@@ -32,10 +36,12 @@ const SideDrawer = ({ props }) => {
     }
 
     useEffect(() => {
-        if (localStorage.getItem('token')) {
-            setAuth(true);
+        if (user.globalUsername) {
+            setIsUser(true);
+        } else {
+            setIsUser(false);
         }
-    }, [globalUser])
+    }, [user.globalUsername])
 
     return (
         <>
@@ -54,18 +60,18 @@ const SideDrawer = ({ props }) => {
                         <Box fontFamily='GoodTimesRg' fontSize={30} color='#5B00FF' ml={1.5}>Zeptical</Box>
                     </Flex>
 
-                    {auth &&
+                    {isUser &&
                         <>
                             <NavLink
                                 to='/user/profile'
                                 className={(navData) => navData.isActive ? styles.user_active : styles.user}
                             >
                                 <Flex as={LazyLoad} alignItems='center'>
-                                    <Image src='https://bit.ly/dan-abramov' className={styles.side_drawer_user_photo} alt='Profile photo' />
+                                    <Image src={user.globalUserPhoto} className={styles.side_drawer_user_photo} alt='Profile photo' />
                                 </Flex>
                                 <Flex className={styles.side_drawer_user_text}>
-                                    <Box className={styles.side_drawer_user_name}>Khan Hasan Raza</Box>
-                                    <Box className={styles.side_drawer_user_username}>hkhan5242</Box>
+                                    <Box className={styles.side_drawer_user_name}>{user.globalUserFullname}</Box>
+                                    <Box className={styles.side_drawer_user_username}>{user.globalUsername}</Box>
                                 </Flex>
                             </NavLink>
 
@@ -76,7 +82,7 @@ const SideDrawer = ({ props }) => {
 
                     <Box className={styles.side_drawer_link}>
                         {SideDrawerItems.map((item, index) => (
-                            (auth === item.auth || 'not required' === item.auth) &&
+                            (isUser === item.auth || 'not required' === item.auth) &&
                             <NavLink
                                 key={index}
                                 to={item.url}
@@ -88,10 +94,13 @@ const SideDrawer = ({ props }) => {
                                 {item.title === 'Notification' && <Badge colorScheme="green">4</Badge>}
                             </NavLink>
                         ))}
-                        <Flex className={styles.single_item} cursor='pointer' onClick={handleLogout}>
-                            <Icon as={BoxArrowRight} />
-                            <Box className={styles.side_drawer_title}>Logout</Box>
-                        </Flex>
+
+                        {isUser &&
+                            <Flex className={styles.single_item} cursor='pointer' onClick={handleLogout}>
+                                <Icon as={BoxArrowRight} />
+                                <Box className={styles.side_drawer_title}>Logout</Box>
+                            </Flex>
+                        }
                     </Box>
 
                     {/* <Box className={styles.sidebar_drawer_bottom_border_container} />

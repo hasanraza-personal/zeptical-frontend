@@ -9,6 +9,10 @@ import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import userReducer from './slice/UserSlice';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import axios from 'axios';
+
+// axios.defaults.baseURL = "http://localhost:5000";
+axios.defaults.baseURL = "https://zeptical.com";
 
 const store = configureStore({
 	reducer: {
