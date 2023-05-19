@@ -32,7 +32,7 @@ const Sidebar = () => {
                 </Flex>
 
                 <NavLink
-                    to='/user/profile'
+                    to={`/user/${user.globalUsername}`}
                     className={(navData) => navData.isActive ? styles.user_active : styles.user}
                 >
                     <Flex as={LazyLoad} alignItems='center'>

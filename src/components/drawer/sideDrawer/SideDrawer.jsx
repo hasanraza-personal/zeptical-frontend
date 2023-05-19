@@ -63,7 +63,8 @@ const SideDrawer = ({ props }) => {
                     {isUser &&
                         <>
                             <NavLink
-                                to='/user/profile'
+                                onClick={hanldeCloseDrawer}
+                                to={`/user/${user.globalUsername}`}
                                 className={(navData) => navData.isActive ? styles.user_active : styles.user}
                             >
                                 <Flex as={LazyLoad} alignItems='center'>

@@ -1,10 +1,10 @@
-import { Box, Divider, Flex, Icon, useMediaQuery } from '@chakra-ui/react';
+import { Box, Divider, Flex, Icon, useMediaQuery } from '@chakra-ui/react'
 import React from 'react'
-import { JournalText, Pencil, PlusLg } from 'react-bootstrap-icons';
-import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Box2Fill, Pencil, PlusLg } from 'react-bootstrap-icons'
+import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 
-const ViewEducation = ({ userEducation, props }) => {
+const ViewSkill = ({ userSkill, props }) => {
     const [mobileScreen] = useMediaQuery('(max-width: 850px)');
     const previousLocation = 'Profile';
     const user = useSelector((state) => state.user.value);
@@ -14,23 +14,23 @@ const ViewEducation = ({ userEducation, props }) => {
             <Box mt={4} px={4} py={2} boxShadow='xs' borderRadius={4}>
                 <Flex alignItems='center' justifyContent='space-between'>
                     <Flex alignItems='center' gap={2}>
-                        <Icon as={JournalText} />
-                        <Box>Education</Box>
+                        <Icon as={Box2Fill} />
+                        <Box>Skill</Box>
                     </Flex>
 
                     {user.globalUsername === props.username &&
                         <Flex
                             as={Link}
                             to='/user/editcollaborator'
-                            state={{ pageType: "educationDetails", previousLocation, userEducation }}
+                            state={{ pageType: "skillDetails", previousLocation, userSkill }}
                             alignItems='center'
                         >
-                            <Icon as={userEducation ? Pencil : PlusLg} />
+                            <Icon as={userSkill ? Pencil : PlusLg} />
                         </Flex>
                     }
                 </Flex>
 
-                {userEducation &&
+                {userSkill &&
                     <Divider className='container-divider' />
                 }
 
@@ -51,4 +51,4 @@ const ViewEducation = ({ userEducation, props }) => {
     )
 }
 
-export default ViewEducation
+export default ViewSkill

@@ -104,7 +104,7 @@ function App() {
 
 							<Route path='/user' >
 								<Route path='home' element={<UserHome />} />
-								<Route path='profile' element={<UserProfile />} errorElement={<UserHome />} />
+								<Route path=':username' element={<UserProfile />} errorElement={<UserHome />} />
 								<Route path='editprofile' element={<EditUserProfile />} />
 								<Route path='editcollaborator' element={<EditCollaborator />} />
 								{/* <Route path='collaborator' element={<CollaboratorProfile />} />

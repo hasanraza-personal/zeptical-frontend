@@ -19,6 +19,6 @@ export const BottomMobileNavbarItems = [
     },
     {
         icon: PersonCircle,
-        url: '/user/profile',
+        url: 'username',
     }
 ]

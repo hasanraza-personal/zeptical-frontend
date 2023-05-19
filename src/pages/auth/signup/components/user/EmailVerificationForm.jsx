@@ -42,6 +42,7 @@ const EmailVerificationForm = ({ props }) => {
                 data: { otp: userOTP }
             });
             const data = response.data
+            console.log('data: ', data);
 
             if (data.msg === "OTP expired") {
                 setOTPExpired(true)

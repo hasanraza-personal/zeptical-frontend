@@ -1,15 +1,26 @@
-import { Box, Container, Flex, Icon, Image, Tab, TabList, TabPanel, TabPanels, Tabs, useMediaQuery } from '@chakra-ui/react';
-import React from 'react'
-import { Pencil, Person, QrCode, RocketTakeoff } from 'react-bootstrap-icons';
+import { Box, Container, Flex, Icon, Image, Tab, TabList, TabPanel, TabPanels, Tabs, useMediaQuery, useToast } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react'
+import { ArrowLeft, Pencil, Person, QrCode, RocketTakeoff } from 'react-bootstrap-icons';
 import LazyLoad from 'react-lazy-load';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Collaborator from './collaborator/Collaborator';
+import axios from 'axios';
+import './profile.css';
 
 const Profile = () => {
     const [mobileScreen] = useMediaQuery('(max-width: 850px)');
     const user = useSelector((state) => state.user.value);
     const previousLocation = "Profile";
+    const toast = useToast();
+    const location = useLocation();
+    const navigate = useNavigate();
+    const username = location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
+    const [credentials, setCredentials] = useState({
+        userFullname: "",
+        username: "",
+        userPhoto: "",
+    });
 
     const tabHead = [
         Person,
@@ -17,27 +28,77 @@ const Profile = () => {
         QrCode
     ]
 
+    const fetchUser = async () => {
+        try {
+            let response = await axios({
+                method: 'GET',
+                url: `/api/user/profile/getuser/${username}`,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+            });
+            let data = response.data;
+            setCredentials({
+                userFullname: data.user.userFullname,
+                username: data.user.username,
+                userPhoto: data.user.userPhoto
+            })
+        } catch (error) {
+            toast({
+                position: 'top',
+                title: error.response.data.msg,
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            });
+        }
+    }
+
+    useEffect(() => {
+        fetchUser();
+        // eslint-disable-next-line
+    }, [username])
+
     return (
         <>
-            <Container maxW='xl' p='0' >
+            <Container maxW='xl' p='0' pb={20}>
                 {!mobileScreen &&
-                    <Box className='_page_title'>Profile</Box>
+                    <>
+                        {user.globalUsername === credentials.username ?
+                            <Box className='_page_title'>Profile</Box>
+                            :
+                            <Box className='back-navigation-container' onClick={() => navigate(-1)} fontSize={mobileScreen ? '18px' : '22px'}>
+                                <Icon as={ArrowLeft} />
+                                <Box className='back-navigation-location'>Back</Box>
+                            </Box>
+                        }
+                    </>
+                }
+
+                {user.globalUsername !== credentials.username && mobileScreen &&
+                    <Box className='back-navigation-container' onClick={() => navigate(-1)} fontSize={mobileScreen ? '18px' : '22px'}>
+                        <Icon as={ArrowLeft} />
+                        <Box className='back-navigation-location'>Back</Box>
+                    </Box>
                 }
 
                 <Box mt={4} px={mobileScreen && 4}>
                     <Flex alignItems='center' justifyContent='space-between'>
                         <Flex alignItems='center' gap={3}>
                             <Box>
-                                <Image src={user.globalUserPhoto} boxSize='60px' objectFit='cover' alt='Profile' borderRadius='full' />
+                                <Image src={credentials.userPhoto} boxSize='60px' objectFit='cover' alt='Profile' borderRadius='full' />
                             </Box>
                             <Box>
-                                <Box>{user.globalUserFullname}</Box>
-                                <Box>{user.globalUsername}</Box>
+                                <Box>{credentials.userFullname}</Box>
+                                <Box>{credentials.username}</Box>
                             </Box>
                         </Flex>
-                        <Flex as={Link} to='/user/editprofile' state={{ previousLocation }} alignItems='center' cursor='pointer'>
-                            <Icon as={Pencil} />
-                        </Flex>
+                        {user.globalUsername === credentials.username &&
+                            <Flex as={Link} to='/user/editprofile' state={{ previousLocation }} alignItems='center' cursor='pointer'>
+                                <Icon as={Pencil} />
+                            </Flex>
+                        }
                     </Flex>
 
                     <Tabs size='lg' mt={4}>
@@ -57,10 +118,7 @@ const Profile = () => {
                         <TabPanels py={1}>
                             <TabPanel p='5px 0'>
                                 {/* Collaborator */}
-                                <Collaborator />
-
-
-
+                                <Collaborator props={{ username: credentials.username }} />
 
                             </TabPanel>
                             <TabPanel p={0}>
