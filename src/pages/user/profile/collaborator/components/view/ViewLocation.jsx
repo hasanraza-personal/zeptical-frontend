@@ -4,7 +4,7 @@ import { GeoAltFill, Pencil, PlusLg } from 'react-bootstrap-icons';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-const ViewLocation = ({ userLocation, props }) => {
+const ViewLocation = ({ userData, props }) => {
     const [mobileScreen] = useMediaQuery('(max-width: 850px)');
     const previousLocation = 'Profile';
     const user = useSelector((state) => state.user.value);
@@ -22,33 +22,34 @@ const ViewLocation = ({ userLocation, props }) => {
                         <Flex
                             as={Link}
                             to='/user/editcollaborator'
-                            state={{ pageType: "locationDetails", previousLocation, userLocation }}
+                            state={{ pageType: "locationDetails", previousLocation, userData }}
                             alignItems='center'
                         >
-                            <Icon as={userLocation ? Pencil : PlusLg} />
+                            <Icon as={userData ? Pencil : PlusLg} />
                         </Flex>
                     }
                 </Flex>
 
-                {userLocation &&
-                    <>
-                        <Divider className='container-divider' />
+                <Divider className='container-divider' />
 
-
-                        <Box>
-                            <Stack gap={1}>
-                                <Box>
-                                    <Box>City</Box>
-                                    <Box>{userLocation?.userCity}</Box>
-                                </Box>
-                                <Box>
-                                    <Box>State</Box>
-                                    <Box>{userLocation?.userState}</Box>
-                                </Box>
-                            </Stack>
-                        </Box>
-                    </>
-                }
+                {userData ? <>
+                    <Box>
+                        <Stack gap={1}>
+                            <Box>
+                                <Box>City</Box>
+                                <Box>{userData?.userCity}</Box>
+                            </Box>
+                            <Box>
+                                <Box>State</Box>
+                                <Box>{userData?.userState}</Box>
+                            </Box>
+                        </Stack>
+                    </Box>
+                </> : <>
+                    <Box textAlign='center' py={4}>
+                        No location information available
+                    </Box>
+                </>}
             </Box>
         </>
     )

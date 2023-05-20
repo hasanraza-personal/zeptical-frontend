@@ -33,7 +33,7 @@ const ViewAchievement = ({ userAchievement }) => {
                     <Flex as={LazyLoad} justifyContent='center'>
                         <Image src={AchievementImage} w={mobileScreen ? 90 : 100} />
                     </Flex>
-                    <Box textAlign='center' mt={1} textDecoration='underline'>Add your achievement</Box>
+                    <Box textAlign='center' mt={1} textDecoration='underline'>Click to view your achievement</Box>
                 </Box>
 
                 {/* <Box>

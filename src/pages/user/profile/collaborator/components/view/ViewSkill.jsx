@@ -30,22 +30,16 @@ const ViewSkill = ({ userSkill, props }) => {
                     }
                 </Flex>
 
-                {userSkill &&
-                    <Divider className='container-divider' />
-                }
+                <Divider className='container-divider' />
 
-                {/* <Box>
-                    <Stack gap={1}>
-                        <Box>
-                            <Box>City</Box>
-                            <Box>{userLocation?.userCity}</Box>
-                        </Box>
-                        <Box>
-                            <Box>State</Box>
-                            <Box>{userLocation?.userState}</Box>
-                        </Box>
-                    </Stack>
-                </Box> */}
+                {userSkill ? <>
+                    <Box></Box>
+                </> : <>
+                    <Box textAlign='center' py={4}>
+                        No skill information available
+                    </Box>
+                </>}
+
             </Box>
         </>
     )

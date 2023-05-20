@@ -4,7 +4,7 @@ import { JournalText, Pencil, PlusLg } from 'react-bootstrap-icons';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-const ViewEducation = ({ userEducation, props }) => {
+const ViewEducation = ({ userData, props }) => {
     const [mobileScreen] = useMediaQuery('(max-width: 850px)');
     const previousLocation = 'Profile';
     const user = useSelector((state) => state.user.value);
@@ -22,30 +22,23 @@ const ViewEducation = ({ userEducation, props }) => {
                         <Flex
                             as={Link}
                             to='/user/editcollaborator'
-                            state={{ pageType: "educationDetails", previousLocation, userEducation }}
+                            state={{ pageType: "educationDetails", previousLocation, userData }}
                             alignItems='center'
                         >
-                            <Icon as={userEducation ? Pencil : PlusLg} />
+                            <Icon as={userData ? Pencil : PlusLg} />
                         </Flex>
                     }
                 </Flex>
 
-                {userEducation &&
-                    <Divider className='container-divider' />
-                }
+                <Divider className='container-divider' />
 
-                {/* <Box>
-                    <Stack gap={1}>
-                        <Box>
-                            <Box>City</Box>
-                            <Box>{userLocation?.userCity}</Box>
-                        </Box>
-                        <Box>
-                            <Box>State</Box>
-                            <Box>{userLocation?.userState}</Box>
-                        </Box>
-                    </Stack>
-                </Box> */}
+                {userData ? <>
+                    <Box></Box>
+                </> : <>
+                    <Box textAlign='center' py={4}>
+                        No education information available
+                    </Box>
+                </>}
             </Box>
         </>
     )

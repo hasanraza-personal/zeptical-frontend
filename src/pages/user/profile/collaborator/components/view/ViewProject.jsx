@@ -33,7 +33,7 @@ const ViewProject = ({ userProject }) => {
                     <Flex as={LazyLoad} justifyContent='center'>
                         <Image src={ProjectImage} w={mobileScreen ? 90 : 100} />
                     </Flex>
-                    <Box textAlign='center' mt={1} textDecoration='underline'>Add your project</Box>
+                    <Box textAlign='center' mt={1} textDecoration='underline'>Click to view your project</Box>
                 </Box>
 
                 {/* <Box>

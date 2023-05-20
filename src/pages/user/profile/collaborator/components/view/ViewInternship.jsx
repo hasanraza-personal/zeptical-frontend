@@ -34,7 +34,7 @@ const ViewInternship = ({ userInternship }) => {
                     <Flex as={LazyLoad} justifyContent='center'>
                         <Image src={InternshipImage} w={mobileScreen ? 90 : 100} />
                     </Flex>
-                    <Box textAlign='center' mt={1} textDecoration='underline'>Add your internship</Box>
+                    <Box textAlign='center' mt={1} textDecoration='underline'>Click to view your internship</Box>
                 </Box>
 
                 {/* <Box>

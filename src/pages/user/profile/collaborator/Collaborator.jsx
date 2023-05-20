@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Information1 from './components/view/Information1'
 import axios from 'axios';
-import { useMediaQuery, useToast } from '@chakra-ui/react';
+import { Container, useMediaQuery, useToast } from '@chakra-ui/react';
 import ViewLocation from './components/view/ViewLocation';
 import ViewEducation from './components/view/ViewEducation';
 import ViewProject from './components/view/ViewProject';
@@ -10,6 +10,7 @@ import ViewAchievement from './components/view/ViewAchievement';
 import ViewInternship from './components/view/ViewInternship';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import SystemLoader from '../../../../components/loader/systemLoader/SystemLoader';
 
 const Collaborator = ({ props }) => {
     const user = useSelector((state) => state.user.value);
@@ -18,6 +19,7 @@ const Collaborator = ({ props }) => {
     const toast = useToast();
     const location = useLocation();
     const username = location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
+    const [loadCompleted, setLoadCompleted] = useState(false);
 
     const fetchUser = async () => {
         try {
@@ -30,6 +32,9 @@ const Collaborator = ({ props }) => {
                 },
             });
             setUserData(response.data.user);
+
+            setLoadCompleted(true);
+
         } catch (error) {
             toast({
                 position: 'top',
@@ -46,25 +51,33 @@ const Collaborator = ({ props }) => {
         // eslint-disable-next-line
     }, [username])
 
-    return (
-        <>
-            {user.globalUsername === props.username &&
-                <Information1 />
-            }
+    if (loadCompleted) {
+        return (
+            <>
+                {user.globalUsername === props.username &&
+                    <Information1 />
+                }
 
-            <ViewLocation userLocation={userData.location} props={props} />
+                <ViewLocation userData={userData.location} props={props} />
 
-            <ViewEducation userEducation={userData.education} props={props} />
+                <ViewEducation userData={userData.education} props={props} />
 
-            <ViewSkill userSKill={userData.skill} props={props} />
+                <ViewSkill userSKill={userData.skill} props={props} />
 
-            <ViewProject userProject={userData.project} />
+                <ViewProject userProject={userData.project} />
 
-            <ViewAchievement userAchievement={userData.achievement} />
+                <ViewAchievement userAchievement={userData.achievement} />
 
-            <ViewInternship userInternship={userData.internship} />
-        </>
-    )
+                <ViewInternship userInternship={userData.internship} />
+            </>
+        )
+    } else {
+        return (
+            <Container maxW='xl' p='0' pb={20}>
+                <SystemLoader />
+            </Container>
+        )
+    }
 }
 
 export default Collaborator
