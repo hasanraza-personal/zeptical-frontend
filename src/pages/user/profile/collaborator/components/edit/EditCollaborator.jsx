@@ -13,8 +13,6 @@ const EditCollaborator = () => {
     const [mobileScreen] = useMediaQuery('(max-width: 850px)');
     const location = useLocation();
 
-    const { userData, previousLocation, pageType } = location.state;
-
     if (!location.state) {
         return (
             <>
@@ -27,6 +25,8 @@ const EditCollaborator = () => {
             </>
         )
     }
+    
+    const { userData, previousLocation, pageType } = location.state;
 
     return (
         <>

@@ -73,7 +73,6 @@ const EditLocation = ({ userData }) => {
                 isClosable: true,
             });
         }
-
     }
 
     useEffect(() => {
