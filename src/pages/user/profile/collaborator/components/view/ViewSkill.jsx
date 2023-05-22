@@ -22,7 +22,7 @@ const ViewSkill = ({ userSkill, props }) => {
                         <Flex
                             as={Link}
                             to='/user/editcollaborator'
-                            state={{ pageType: "skillDetails", previousLocation, userSkill }}
+                            state={{ pageType: "skillDetails", previousLocation }}
                             alignItems='center'
                         >
                             <Icon as={userSkill ? Pencil : PlusLg} />

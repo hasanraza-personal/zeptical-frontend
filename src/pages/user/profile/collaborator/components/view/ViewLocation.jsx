@@ -22,7 +22,7 @@ const ViewLocation = ({ userData, props }) => {
                         <Flex
                             as={Link}
                             to='/user/editcollaborator'
-                            state={{ pageType: "locationDetails", previousLocation, userData }}
+                            state={{ pageType: "locationDetails", previousLocation }}
                             alignItems='center'
                         >
                             <Icon as={userData ? Pencil : PlusLg} />

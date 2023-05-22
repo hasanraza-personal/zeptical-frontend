@@ -8,6 +8,7 @@ import TextInput from '../../../../../../components/inputFields/textInput/TextIn
 import axios from 'axios';
 import EditLocation from './components/EditLocation';
 import EditEducation from './components/EditEducation';
+import EditSkill from './components/EditSkill';
 
 const EditCollaborator = () => {
     const [mobileScreen] = useMediaQuery('(max-width: 850px)');
@@ -25,8 +26,8 @@ const EditCollaborator = () => {
             </>
         )
     }
-    
-    const { userData, previousLocation, pageType } = location.state;
+
+    const { previousLocation, pageType } = location.state;
 
     return (
         <>
@@ -36,13 +37,16 @@ const EditCollaborator = () => {
                 </Box>
 
                 {pageType === "locationDetails" &&
-                    <EditLocation userData={userData} />
+                    <EditLocation />
                 }
 
                 {pageType === "educationDetails" &&
-                    <EditEducation userData={userData} />
+                    <EditEducation />
                 }
 
+                {pageType === "skillDetails" &&
+                    <EditSkill />
+                }
 
 
             </Container>
