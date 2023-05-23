@@ -1,4 +1,4 @@
-import { Container, useMediaQuery, useToast } from '@chakra-ui/react';
+import { Box, Button, Container, useMediaQuery, useToast } from '@chakra-ui/react';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import SystemLoader from '../../../../../../../components/loader/systemLoader/SystemLoader';
@@ -12,11 +12,66 @@ const EditSkill = () => {
     const [credentials, setCredentials] = useState({
         skill: [],
     });
-    console.log('credentials: ', credentials);
 
     const onChange = (e) => {
-        console.log('e: ', e);
         setCredentials({ ...credentials, [e.target.name]: e.target.value })
+    }
+
+    const handleSubmit = async () => {
+        if (typeof credentials.skill === "string" && credentials.skill.length !== 0) {
+            toast({
+                position: 'top',
+                title: "Please click on add button before updating your skill",
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            });
+            return
+        }
+
+        if (credentials.skill.length === 0) {
+            toast({
+                position: 'top',
+                title: "Please provide your skill",
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            });
+            return
+        }
+        setLoading(true);
+
+        try {
+            let response = await axios({
+                method: 'POST',
+                url: '/api/user/profile/updateskill',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                data: { skill: credentials.skill }
+            });
+
+            setTimeout(() => {
+                setLoading(false);
+                toast({
+                    position: 'top',
+                    title: response.data.msg,
+                    status: 'success',
+                    duration: 3000,
+                    isClosable: true,
+                });
+            }, 500)
+        } catch (error) {
+            setLoading(false);
+            toast({
+                position: 'top',
+                title: error.response.data.msg,
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            });
+        }
     }
 
     const fetchUserSkill = async () => {
@@ -30,8 +85,8 @@ const EditSkill = () => {
                 },
             });
             const data = response.data.user;
-            if (data.location) {
-                setCredentials(data.user.skill)
+            if (data.skill) {
+                setCredentials({ skill: data.skill })
             }
             setLoadCompleted(true);
         } catch (error) {
@@ -53,14 +108,28 @@ const EditSkill = () => {
     if (loadCompleted) {
         return (
             <>
-                <MultiInputValues props={{
-                    isRequired: true,
-                    label: "Your skill",
-                    placeholder: "Java",
-                    name: "skill",
-                    value: credentials.skill,
-                    onChange: onChange
-                }} />
+                <Box mt={4} px={4} py={!mobileScreen && 4} boxShadow={!mobileScreen && 'xs'}>
+                    <MultiInputValues props={{
+                        isRequired: true,
+                        label: "Your skill",
+                        placeholder: "Java",
+                        name: "skill",
+                        value: credentials.skill,
+                        onChange: onChange
+                    }} />
+
+                    <Button
+                        type='submit'
+                        className='zeptical-red-fill-button'
+                        mt={5}
+                        w='100%'
+                        isLoading={loading}
+                        loadingText='Updating'
+                        onClick={handleSubmit}
+                    >
+                        Update
+                    </Button>
+                </Box >
             </>
         )
     } else {

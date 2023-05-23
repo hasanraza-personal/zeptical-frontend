@@ -18,7 +18,7 @@ const Profile = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const username = location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
-    const [credentials, setCredentials] = useState({
+    const [ownerCredentials, setOwnerCredentials] = useState({
         userFullname: "",
         username: "",
         userPhoto: "",
@@ -41,7 +41,7 @@ const Profile = () => {
                 },
             });
             let data = response.data;
-            setCredentials({
+            setOwnerCredentials({
                 userFullname: data.user.userFullname,
                 username: data.user.username,
                 userPhoto: data.user.userPhoto
@@ -70,7 +70,7 @@ const Profile = () => {
                 <Container maxW='xl' p='0' pb={20}>
                     {!mobileScreen &&
                         <>
-                            {user.globalUsername === credentials.username ?
+                            {user.globalUsername === ownerCredentials.username ?
                                 <Box className='_page_title'>Profile</Box>
                                 :
                                 <Box className='back-navigation-container' onClick={() => navigate(-1)} fontSize={mobileScreen ? '18px' : '22px'}>
@@ -81,7 +81,7 @@ const Profile = () => {
                         </>
                     }
 
-                    {user.globalUsername !== credentials.username && mobileScreen &&
+                    {user.globalUsername !== ownerCredentials.username && mobileScreen &&
                         <Box className='back-navigation-container' onClick={() => navigate(-1)} fontSize={mobileScreen ? '18px' : '22px'}>
                             <Icon as={ArrowLeft} />
                             <Box className='back-navigation-location'>Back</Box>
@@ -92,14 +92,14 @@ const Profile = () => {
                         <Flex alignItems='center' justifyContent='space-between'>
                             <Flex alignItems='center' gap={3}>
                                 <Box>
-                                    <Image src={credentials.userPhoto} boxSize='60px' objectFit='cover' alt='Profile' borderRadius='full' />
+                                    <Image src={ownerCredentials.userPhoto} boxSize='60px' objectFit='cover' alt='Profile' borderRadius='full' />
                                 </Box>
                                 <Box>
-                                    <Box>{credentials.userFullname}</Box>
-                                    <Box>{credentials.username}</Box>
+                                    <Box>{ownerCredentials.userFullname}</Box>
+                                    <Box>{ownerCredentials.username}</Box>
                                 </Box>
                             </Flex>
-                            {user.globalUsername === credentials.username &&
+                            {user.globalUsername === ownerCredentials.username &&
                                 <Flex as={Link} to='/user/editprofile' state={{ previousLocation }} alignItems='center' cursor='pointer'>
                                     <Icon as={Pencil} />
                                 </Flex>
@@ -123,7 +123,7 @@ const Profile = () => {
                             <TabPanels py={1}>
                                 <TabPanel p='5px 0'>
                                     {/* Collaborator */}
-                                    <Collaborator props={{ username: credentials.username }} />
+                                    <Collaborator ownerUsername={ownerCredentials.username} />
 
                                 </TabPanel>
                                 <TabPanel p={0}>

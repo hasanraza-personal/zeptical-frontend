@@ -50,6 +50,18 @@
 	color: #eb3838 !important;
 }
 
+.zeptical-original-fill-button {
+	background-color: #5B00FF !important;
+	color: #fff !important;
+	font-family: var(--bold-font) !important;
+}
+
+.zeptical-original-fill-button:hover {
+	border: 1px solid #5B00FF !important;
+	background-color: #fff !important;
+	color: #5B00FF !important;
+}
+
 .input-focus:focus {
 	border: 1px solid #5B00FF !important;
 	box-shadow: 0 0 0 1px #5B00FF !important;
@@ -78,5 +90,21 @@
 .container-divider {
 	margin: 8px 0;
 }
+
+
+.back-navigation-container {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	/* font-size: 18px; */
+	cursor: pointer;
+	font-family: var(--bold-font) !important;
+	padding: 10px 10px 0 10px;
+}
+
+.back-navigation-location {
+	font-family: var(--semiBold-font);
+}
+
 
 /* ----------------- */

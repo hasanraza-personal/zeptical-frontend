@@ -4,7 +4,7 @@ import { JournalText, Pencil, PlusLg } from 'react-bootstrap-icons';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-const ViewEducation = ({ userData, props }) => {
+const ViewEducation = ({ userData, ownerUsername }) => {
     const [mobileScreen] = useMediaQuery('(max-width: 850px)');
     const previousLocation = 'Profile';
     const user = useSelector((state) => state.user.value);
@@ -53,7 +53,7 @@ const ViewEducation = ({ userData, props }) => {
                         <Box>Education</Box>
                     </Flex>
 
-                    {user.globalUsername === props.username &&
+                    {user.globalUsername === ownerUsername &&
                         <Flex
                             as={Link}
                             to='/user/editcollaborator'
@@ -70,7 +70,7 @@ const ViewEducation = ({ userData, props }) => {
                 {userData ? <>
                     <Box>
                         {userEducation.map((education, index) => (
-                            <>
+                            <Box key={index}>
                                 {education.available &&
                                     <Box boxShadow='xs' borderRadius={8} p='14px 12px' mt={3} key={index}>
                                         <Box fontFamily='var(--semiBold-font)'>{education.heading}</Box>
@@ -86,7 +86,7 @@ const ViewEducation = ({ userData, props }) => {
                                         </Stack>
                                     </Box>
                                 }
-                            </>
+                            </Box>
                         ))}
                     </Box>
                 </> : <>

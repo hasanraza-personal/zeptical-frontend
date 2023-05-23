@@ -3,8 +3,9 @@ import React from 'react';
 import { FileTextFill } from 'react-bootstrap-icons';
 import LazyLoad from 'react-lazy-load';
 import ProjectImage from '../../../../../../public/images/project.png';
+import { Link } from 'react-router-dom';
 
-const ViewProject = ({ userProject }) => {
+const ViewProject = ({ ownerUsername }) => {
     const [mobileScreen] = useMediaQuery('(max-width: 850px)');
     const previousLocation = 'Profile';
 
@@ -16,15 +17,6 @@ const ViewProject = ({ userProject }) => {
                         <Icon as={FileTextFill} />
                         <Box>Project</Box>
                     </Flex>
-
-                    {/* <Flex
-                        as={Link}
-                        to='/user/editcollaborator'
-                        state={{ pageType: "locationDetails", previousLocation, userLocation }}
-                        alignItems='center'
-                    >
-                        <Icon as={userLocation ? Pencil : PlusLg} />
-                    </Flex> */}
                 </Flex>
 
                 <Divider className='container-divider' />
@@ -33,21 +25,19 @@ const ViewProject = ({ userProject }) => {
                     <Flex as={LazyLoad} justifyContent='center'>
                         <Image src={ProjectImage} w={mobileScreen ? 90 : 100} />
                     </Flex>
-                    <Box textAlign='center' mt={1} textDecoration='underline'>Click to view your project</Box>
+                    <Flex
+                        justifyContent='center'
+                        as={Link}
+                        to={`/user/${ownerUsername}/project`}
+                        textAlign='center'
+                        mt={1}
+                        textDecoration='underline'
+                        state={{ previousLocation }}
+                    >
+                        Click to view your project
+                    </Flex>
                 </Box>
 
-                {/* <Box>
-                    <Stack gap={1}>
-                        <Box>
-                            <Box>City</Box>
-                            <Box>{userLocation?.userCity}</Box>
-                        </Box>
-                        <Box>
-                            <Box>State</Box>
-                            <Box>{userLocation?.userState}</Box>
-                        </Box>
-                    </Stack>
-                </Box> */}
             </Box>
         </>
     )

@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import styles from './photoinput.module.css';
-import { Box, Flex, Image, Input } from '@chakra-ui/react';
+import styles from './productphotoinput.module.css';
 import ImageLoader from '../../../public/gif/image-loader.gif';
 import ImageError from '../../../public/images/image-error.jpg';
+import { Box, FormControl, FormLabel, Image, Input } from '@chakra-ui/react';
+import DefaultUploadImage from '../../../public/images/upload-image.png';
 
-const PhotoInput = ({ props }) => {
+const ProductPhotoInput = ({ props }) => {
     const [count, setCount] = useState(1);
 
-    const changeProfilePhoto = (e) => {
+    const changeProductPhoto = (e) => {
         if (e.target.files[0]) {
             props.setPhoto(ImageLoader);
             setTimeout(() => {
@@ -37,16 +38,17 @@ const PhotoInput = ({ props }) => {
 
     return (
         <>
-            <Flex justifyContent='center'>
-                <Box>
-                    <Input type='file' name={props.name} className={styles.uploader_input} accept="image/*" onChange={changeProfilePhoto} />
-                    <Flex justifyContent='center' alignItems='center' className={styles.uploader_mask}>
-                        <Image src={props.photo} alt='photo' onError={fetchImage} objectFit='cover' borderRadius='full' boxSize='100px' />
-                    </Flex>
+            <FormControl isRequired={props.isRequired}>
+                <FormLabel>{props.label}</FormLabel>
+                <Box width='100%'>
+                    <Input type='file' accept="image/*" name={props.name} className={styles.project_uploader_input} onChange={changeProductPhoto} />
+                    <Box className={styles.project_uploader_mask}>
+                        <Image src={props.photo.length === 0 ? DefaultUploadImage : props.photo} alt='photo' onError={fetchImage} h={props.photo.length === 0 ? '75px' : '100%'} />
+                    </Box>
                 </Box>
-            </Flex>
+            </FormControl>
         </>
     )
 }
 
-export default PhotoInput
+export default ProductPhotoInput

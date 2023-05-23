@@ -79,6 +79,17 @@ const EditProfile = () => {
             });
             return
         }
+
+        if (credentials.userPhoto.length === 0) {
+            toast({
+                position: 'top',
+                title: "Please provide your profile photo",
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            });
+            return
+        }
         setPhotoSelected(false);
         setLoading(true);
 

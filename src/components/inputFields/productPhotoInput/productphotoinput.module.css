@@ -1,0 +1,15 @@
+.project_uploader_input {
+	height: 250px !important;
+	position: absolute !important;
+	opacity: 0 !important;
+	cursor: pointer;
+}
+
+.project_uploader_mask {
+	display: flex;
+	justify-content: center;
+	align-items: center !important;
+	height: 250px !important;
+	border: 2px dashed #5B00FF;
+	cursor: pointer;
+}

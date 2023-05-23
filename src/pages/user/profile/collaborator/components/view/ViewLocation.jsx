@@ -4,7 +4,7 @@ import { GeoAltFill, Pencil, PlusLg } from 'react-bootstrap-icons';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-const ViewLocation = ({ userData, props }) => {
+const ViewLocation = ({ userData, ownerUsername }) => {
     const [mobileScreen] = useMediaQuery('(max-width: 850px)');
     const previousLocation = 'Profile';
     const user = useSelector((state) => state.user.value);
@@ -18,7 +18,7 @@ const ViewLocation = ({ userData, props }) => {
                         <Box>Location</Box>
                     </Flex>
 
-                    {user.globalUsername === props.username &&
+                    {user.globalUsername === ownerUsername &&
                         <Flex
                             as={Link}
                             to='/user/editcollaborator'

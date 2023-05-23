@@ -12,7 +12,7 @@ import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import SystemLoader from '../../../../components/loader/systemLoader/SystemLoader';
 
-const Collaborator = ({ props }) => {
+const Collaborator = ({ ownerUsername }) => {
     const user = useSelector((state) => state.user.value);
     const [userData, setUserData] = useState({});
     const [mobileScreen] = useMediaQuery('(max-width: 850px)');
@@ -54,17 +54,17 @@ const Collaborator = ({ props }) => {
     if (loadCompleted) {
         return (
             <>
-                {user.globalUsername === props.username &&
+                {user.globalUsername === ownerUsername &&
                     <Information1 />
                 }
 
-                <ViewLocation userData={userData.location} props={props} />
+                <ViewLocation userData={userData.location} ownerUsername={ownerUsername} />
 
-                <ViewEducation userData={userData.education} props={props} />
+                <ViewEducation userData={userData.education} ownerUsername={ownerUsername} />
 
-                <ViewSkill userSKill={userData.skill} props={props} />
+                <ViewSkill userSkill={userData.skill} ownerUsername={ownerUsername} />
 
-                <ViewProject userProject={userData.project} />
+                <ViewProject ownerUsername={ownerUsername} />
 
                 <ViewAchievement userAchievement={userData.achievement} />
 

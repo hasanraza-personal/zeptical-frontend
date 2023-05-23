@@ -48,7 +48,6 @@ const EditCollaborator = () => {
                     <EditSkill />
                 }
 
-
             </Container>
         </>
     )

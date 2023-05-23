@@ -144,25 +144,59 @@ const EditEducation = () => {
                 },
             });
             const data = response.data.user;
+
             if (data.education) {
-                setCredentials({
-                    ssc: {
+                let tempCredentials = {};
+
+                if (data.education.ssc) {
+                    tempCredentials.ssc = {
                         board: data.education.ssc.board,
-                        schoolName: data.education.ssc.schoolName
-                    },
-                    hsc: {
+                        schoolName: data.education.ssc.schoolName,
+                    };
+                } else {
+                    tempCredentials.ssc = {
+                        board: "",
+                        schoolName: "",
+                    };
+                }
+
+                if (data.education.hsc) {
+                    tempCredentials.hsc = {
                         board: data.education.hsc.board,
                         collegeName: data.education.hsc.collegeName
-                    },
-                    diploma: {
+                    };
+                } else {
+                    tempCredentials.hsc = {
+                        board: "",
+                        collegeName: ""
+                    };
+                }
+
+                if (data.education.diploma) {
+                    tempCredentials.diploma = {
                         stream: data.education.diploma.stream,
                         collegeName: data.education.diploma.collegeName
-                    },
-                    degree: {
+                    };
+                } else {
+                    tempCredentials.diploma = {
+                        stream: "",
+                        collegeName: ""
+                    };
+                }
+
+                if (data.education.degree) {
+                    tempCredentials.degree = {
                         stream: data.education.degree.stream,
                         collegeName: data.education.degree.collegeName
-                    },
-                });
+                    };
+                } else {
+                    tempCredentials.degree = {
+                        stream: "",
+                        collegeName: ""
+                    };
+                }
+
+                setCredentials(tempCredentials);
             }
             setLoadCompleted(true);
         } catch (error) {

@@ -1,10 +1,11 @@
-import { Box, Divider, Flex, Icon, useMediaQuery } from '@chakra-ui/react'
+import { Box, Divider, Flex, Icon, Tag, TagLabel, useMediaQuery } from '@chakra-ui/react'
 import React from 'react'
 import { Box2Fill, Pencil, PlusLg } from 'react-bootstrap-icons'
 import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import '../../collaborator.css';
 
-const ViewSkill = ({ userSkill, props }) => {
+const ViewSkill = ({ userSkill, ownerUsername }) => {
     const [mobileScreen] = useMediaQuery('(max-width: 850px)');
     const previousLocation = 'Profile';
     const user = useSelector((state) => state.user.value);
@@ -18,7 +19,7 @@ const ViewSkill = ({ userSkill, props }) => {
                         <Box>Skill</Box>
                     </Flex>
 
-                    {user.globalUsername === props.username &&
+                    {user.globalUsername === ownerUsername &&
                         <Flex
                             as={Link}
                             to='/user/editcollaborator'
@@ -33,7 +34,19 @@ const ViewSkill = ({ userSkill, props }) => {
                 <Divider className='container-divider' />
 
                 {userSkill ? <>
-                    <Box></Box>
+                    <Box>
+                        {userSkill.map((item, index) => (
+                            <Tag
+                                size='lg'
+                                key={index}
+                                borderRadius='full'
+                                variant='solid'
+                                className='tag'
+                            >
+                                <TagLabel>{item}</TagLabel>
+                            </Tag>
+                        ))}
+                    </Box>
                 </> : <>
                     <Box textAlign='center' py={4}>
                         No skill information available
