@@ -80,7 +80,9 @@ const Project = () => {
                 data: { projectId: deleteProjectId }
             });
 
+            let newProject = allProject.filter(element => element._id !== deleteProjectId);
             setDeleteProjectId("");
+            setAllProject(newProject);
             setTimeout(() => {
                 toast({
                     position: 'top',

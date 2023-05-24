@@ -3,11 +3,13 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import SystemLoader from '../../../../../../../components/loader/systemLoader/SystemLoader';
 import MultiInputValues from '../../../../../../../components/inputFields/multiInputValues/MultiInputValues';
+import { useNavigate } from 'react-router-dom';
 
 const EditSkill = () => {
     const [mobileScreen] = useMediaQuery('(max-width: 850px)');
     const [loading, setLoading] = useState(false);
     const toast = useToast();
+    const navigate = useNavigate();
     const [loadCompleted, setLoadCompleted] = useState(false);
     const [credentials, setCredentials] = useState({
         skill: [],
@@ -54,6 +56,7 @@ const EditSkill = () => {
 
             setTimeout(() => {
                 setLoading(false);
+                navigate(-1)
                 toast({
                     position: 'top',
                     title: response.data.msg,
@@ -61,7 +64,7 @@ const EditSkill = () => {
                     duration: 3000,
                     isClosable: true,
                 });
-            }, 500)
+            }, 1000)
         } catch (error) {
             setLoading(false);
             toast({

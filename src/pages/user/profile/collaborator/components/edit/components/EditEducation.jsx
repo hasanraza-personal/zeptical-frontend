@@ -3,12 +3,14 @@ import React, { useEffect, useState } from 'react'
 import TextInput from '../../../../../../../components/inputFields/textInput/TextInput';
 import axios from 'axios';
 import SystemLoader from '../../../../../../../components/loader/systemLoader/SystemLoader';
+import { useNavigate } from 'react-router-dom';
 
 const EditEducation = () => {
     const [mobileScreen] = useMediaQuery('(max-width: 850px)');
     const [loading, setLoading] = useState(false);
     const toast = useToast();
     const [loadCompleted, setLoadCompleted] = useState(false);
+    const navigate = useNavigate();
     const [credentials, setCredentials] = useState({
         ssc: {
             board: "",
@@ -112,6 +114,7 @@ const EditEducation = () => {
 
             setTimeout(() => {
                 setLoading(false);
+                navigate(-1)
                 toast({
                     position: 'top',
                     title: response.data.msg,
@@ -119,7 +122,7 @@ const EditEducation = () => {
                     duration: 3000,
                     isClosable: true,
                 });
-            }, 500)
+            }, 1000)
         } catch (error) {
             setLoading(false);
             toast({

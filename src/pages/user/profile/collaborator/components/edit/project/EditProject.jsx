@@ -176,6 +176,7 @@ const EditProject = () => {
             if (locationRef.current.projectId) {
                 fetchProject();
             }
+            setLoadCompleted(true);
         }
         // eslint-disable-next-line
     }, [])

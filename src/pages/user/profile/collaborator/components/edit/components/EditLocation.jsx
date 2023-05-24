@@ -3,11 +3,13 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import TextInput from '../../../../../../../components/inputFields/textInput/TextInput';
 import SystemLoader from '../../../../../../../components/loader/systemLoader/SystemLoader';
+import { useNavigate } from 'react-router-dom';
 
 const EditLocation = () => {
     const [mobileScreen] = useMediaQuery('(max-width: 850px)');
     const [loading, setLoading] = useState(false);
     const toast = useToast();
+    const navigate = useNavigate();
     const [loadCompleted, setLoadCompleted] = useState(false);
     const [credentials, setCredentials] = useState({
         userCity: "",
@@ -57,6 +59,7 @@ const EditLocation = () => {
 
             setTimeout(() => {
                 setLoading(false);
+                navigate(-1)
                 toast({
                     position: 'top',
                     title: response.data.msg,
@@ -64,7 +67,7 @@ const EditLocation = () => {
                     duration: 3000,
                     isClosable: true,
                 });
-            }, 500)
+            }, 1000)
         } catch (error) {
             setLoading(false);
             toast({

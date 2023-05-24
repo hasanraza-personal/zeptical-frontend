@@ -34,7 +34,7 @@ const ViewSkill = ({ userSkill, ownerUsername }) => {
 
                 <Divider className='container-divider' />
 
-                {userSkill ? <>
+                {userSkill.length !== 0 ? <>
                     <Box>
                         {userSkill.map((item, index) => (
                             <Tag
