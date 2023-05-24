@@ -1,11 +1,9 @@
-import { Box, Button, Container, Flex, Image, VStack, useMediaQuery, useToast } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import { Box, Container, Flex, Image, useMediaQuery } from '@chakra-ui/react';
+import React from 'react';
 import NotFoundImage from '../../../../../../public/images/undraw/not_found.svg';
 import LazyLoad from 'react-lazy-load';
 import { useLocation } from 'react-router-dom';
 import PreviousLocation from '../../../../../../components/previousLocation/PreviousLocation';
-import TextInput from '../../../../../../components/inputFields/textInput/TextInput';
-import axios from 'axios';
 import EditLocation from './components/EditLocation';
 import EditEducation from './components/EditEducation';
 import EditSkill from './components/EditSkill';

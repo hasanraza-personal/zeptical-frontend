@@ -1,7 +1,6 @@
 import { Box, Container, Flex, Icon, Image, Tab, TabList, TabPanel, TabPanels, Tabs, useMediaQuery, useToast } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react'
 import { ArrowLeft, Pencil, Person, QrCode, RocketTakeoff } from 'react-bootstrap-icons';
-import LazyLoad from 'react-lazy-load';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Collaborator from './collaborator/Collaborator';

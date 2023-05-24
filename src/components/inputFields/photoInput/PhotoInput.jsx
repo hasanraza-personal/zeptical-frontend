@@ -33,6 +33,7 @@ const PhotoInput = ({ props }) => {
 
     useEffect(() => {
         props.setPhoto(props.value);
+        // eslint-disable-next-line
     }, [])
 
     return (

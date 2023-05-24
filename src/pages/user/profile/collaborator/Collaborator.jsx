@@ -13,9 +13,10 @@ import { useSelector } from 'react-redux';
 import SystemLoader from '../../../../components/loader/systemLoader/SystemLoader';
 
 const Collaborator = ({ ownerUsername }) => {
+    // eslint-disable-next-line 
+    const [mobileScreen] = useMediaQuery('(max-width: 850px)');
     const user = useSelector((state) => state.user.value);
     const [userData, setUserData] = useState({});
-    const [mobileScreen] = useMediaQuery('(max-width: 850px)');
     const toast = useToast();
     const location = useLocation();
     const username = location.pathname.substring(location.pathname.lastIndexOf('/') + 1);

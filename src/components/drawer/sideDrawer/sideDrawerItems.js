@@ -1,4 +1,4 @@
-import { Bell, BoxArrowInRight, CCircle, Gear, InfoCircle, PersonCircle, QuestionCircle, RCircle, Telephone } from 'react-bootstrap-icons';
+import { Bell, BoxArrowInRight, Gear, InfoCircle, PersonCircle, QuestionCircle, RCircle, Telephone } from 'react-bootstrap-icons';
 
 export const SideDrawerItems = [
     {

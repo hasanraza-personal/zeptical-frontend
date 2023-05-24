@@ -1,15 +1,16 @@
-import { Link as ChakraLink, Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Button, Container, Flex, Icon, Image, Stack, VStack, useMediaQuery, useToast } from '@chakra-ui/react';
+import { Link as ChakraLink, Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Button, Container, Flex, Icon, Image, Stack, useMediaQuery, useToast, useDisclosure } from '@chakra-ui/react';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { ArrowLeft, PencilSquare, PlusLg, Trash } from 'react-bootstrap-icons';
+import React, { useEffect, useRef, useState } from 'react';
+import { Pencil, PlusLg, Trash } from 'react-bootstrap-icons';
 import { useSelector } from 'react-redux';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import SystemLoader from '../../../../../../../components/loader/systemLoader/SystemLoader';
 import LazyLoad from 'react-lazy-load';
 import NotFoundImage from '../../../../../../../public/images/undraw/not_found.svg';
 import PreviousLocation from '../../../../../../../components/previousLocation/PreviousLocation';
 import { v4 as uuidv4 } from 'uuid';
 import { ExternalLinkIcon } from '@chakra-ui/icons'
+import Alert from '../../../../../../../components/alert/Alert';
 
 const Project = () => {
     /* cannot use ownerCredentials.username (ownerUsername when passed as props) 
@@ -21,11 +22,14 @@ const Project = () => {
 
     const [mobileScreen] = useMediaQuery('(max-width: 850px)');
     const user = useSelector((state) => state.user.value);
-    const navigate = useNavigate();
     const [allProject, setAllProject] = useState([])
     const toast = useToast();
     const id = uuidv4();
     const [loadCompleted, setLoadCompleted] = useState(false);
+    const locationRef = useRef("");
+    const [loading, setLoading] = useState(false);
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [deleteProjectId, setDeleteProjectId] = useState("");
 
     const fetchProject = async () => {
         try {
@@ -52,7 +56,76 @@ const Project = () => {
         }
     }
 
+    const handleDelete = async () => {
+        if (deleteProjectId.length === 0) {
+            toast({
+                position: 'top',
+                title: "Something went wrong. Please refresh the page and try again.",
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            });
+            return;
+        }
+        setLoading(true);
+
+        try {
+            let response = await axios({
+                method: 'POST',
+                url: '/api/user/profile/deleteproject',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                data: { projectId: deleteProjectId }
+            });
+
+            setDeleteProjectId("");
+            setTimeout(() => {
+                toast({
+                    position: 'top',
+                    title: response.data.msg,
+                    status: 'success',
+                    duration: 5000,
+                    isClosable: true,
+                });
+                setLoading(false);
+                onClose();
+            }, 1000)
+        } catch (error) {
+            setLoading(false)
+            toast({
+                position: 'top',
+                title: error.response.data.msg,
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            });
+        }
+    }
+
+    const handleLimitProject = () => {
+        if (!toast.isActive(id)) {
+            toast({
+                id,
+                position: 'top',
+                title: "You can add upto 5 projects only",
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+            });
+        }
+    }
+
+    const openDeleteAlert = (projectId) => {
+        onOpen();
+        setDeleteProjectId(projectId)
+    }
+
     useEffect(() => {
+        if (location.state) {
+            locationRef.current = location.state;
+        }
         fetchProject();
         // eslint-disable-next-line
     }, []);
@@ -70,27 +143,24 @@ const Project = () => {
         )
     }
 
-    const handleLimitProject = () => {
-        if (!toast.isActive(id)) {
-            toast({
-                id,
-                position: 'top',
-                title: "You can add upto 5 projects only",
-                status: 'error',
-                duration: 5000,
-                isClosable: true,
-            });
-        }
-    }
-
-    const { previousLocation } = location.state;
-
     if (loadCompleted) {
         return (
             <>
+                <Alert props={{
+                    isOpen,
+                    onClose,
+                    titleText: "Delete Project",
+                    bodyText: "Are you sure? You want to delete this project. You can't undo this action afterwards.",
+                    leftBtnText: "Close",
+                    rightBtnText: "Delete Project",
+                    rightBtnFn: handleDelete,
+                    loading,
+                    loadingText: "Deleting"
+                }} />
+
                 <Container maxW='xl' pb={20}>
                     <Box>
-                        <PreviousLocation props={{ location: previousLocation }} />
+                        <PreviousLocation props={{ location: locationRef.current.previousLocation }} />
                     </Box>
 
                     {user.globalUsername === username &&
@@ -136,34 +206,24 @@ const Project = () => {
                                         </AccordionButton>
                                     </h2>
                                     <AccordionPanel>
-                                        <Flex justifyContent='end' gap={2}>
-                                            <Button
-                                                size='sm'
-                                                gap={2}
-                                                colorScheme='telegram'
-                                                variant='outline'
-                                            >
-                                                <Icon as={PencilSquare} />
-                                                <Box>Edit</Box>
-                                            </Button>
-
-                                            <Button
-                                                size='sm'
-                                                gap={2}
-                                                colorScheme='red'
-                                                variant='outline'
-                                            >
-                                                <Icon as={Trash} />
-                                                <Box>Delete</Box>
-                                            </Button>
-                                        </Flex>
-
                                         <Box pb={4}>
                                             <Stack gap={1}>
-                                                <Box>
-                                                    <Box>Project name</Box>
-                                                    <Box>{project.name}</Box>
-                                                </Box>
+                                                <Flex justifyContent='space-between'>
+                                                    <Box>
+                                                        <Box>Project name</Box>
+                                                        <Box>{project.name}</Box>
+                                                    </Box>
+                                                    <Flex gap={4}>
+                                                        <Link
+                                                            as={Link}
+                                                            to={`/user/${username}/editproject`}
+                                                            state={{ projectId: project._id }}
+                                                        >
+                                                            <Icon as={Pencil} cursor='pointer' color='blue' fontSize={18} />
+                                                        </Link>
+                                                        <Icon as={Trash} cursor='pointer' color='red' fontSize={18} onClick={() => openDeleteAlert(project._id)} />
+                                                    </Flex>
+                                                </Flex>
                                                 <Box>
                                                     <Box>Project description</Box>
                                                     <Box>{project.description}</Box>
@@ -172,8 +232,8 @@ const Project = () => {
                                                     <Box>Project Link</Box>
                                                     {
                                                         project.projectLink ? <>
-                                                            <ChakraLink href={project.projectLink} isExternal>
-                                                                <Box>{project.projectLink}<ExternalLinkIcon mx={1} /></Box>
+                                                            <ChakraLink href={`https://${project.projectLink}`} isExternal>
+                                                                https://{project.projectLink} <ExternalLinkIcon mx='2px' />
                                                             </ChakraLink>
                                                         </> : <>
                                                             <Box>{"Not provided"}</Box>
@@ -183,7 +243,15 @@ const Project = () => {
                                                 </Box>
                                                 <Box>
                                                     <Box>Github Link</Box>
-                                                    <Box>{project.githubLink ? project.githubLink : "Not provided"}</Box>
+                                                    {
+                                                        project.githubLink ? <>
+                                                            <ChakraLink href={`https://${project.githubLink}`} isExternal>
+                                                                https://{project.githubLink} <ExternalLinkIcon mx='2px' />
+                                                            </ChakraLink>
+                                                        </> : <>
+                                                            <Box>{"Not provided"}</Box>
+                                                        </>
+                                                    }
                                                 </Box>
                                                 <Box>
                                                     <Box className='body-label'>Project photo</Box>

@@ -10,6 +10,7 @@ import { Provider } from 'react-redux';
 import userReducer from './slice/UserSlice';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import axios from 'axios';
+import ScrollToTop from './ScrollToTop';
 
 axios.defaults.baseURL = "http://localhost:5000";
 // axios.defaults.baseURL = "https://zeptical.com";
@@ -26,6 +27,7 @@ root.render(
 		<HelmetProvider>
 			<BrowserRouter>
 				<Provider store={store}>
+					<ScrollToTop />
 					<GoogleOAuthProvider clientId='909941277236-l7t78f89v2sp3dk9eaoa0f9sduv8r0t4.apps.googleusercontent.com'>
 						<App />
 					</GoogleOAuthProvider>

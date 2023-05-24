@@ -6,6 +6,7 @@ import AchievementImage from '../../../../../../public/images/achievement.png';
 
 const ViewAchievement = ({ userAchievement }) => {
     const [mobileScreen] = useMediaQuery('(max-width: 850px)');
+    // eslint-disable-next-line
     const previousLocation = 'Profile';
 
     return (

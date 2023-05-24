@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import Header from './components/header/Header';
 import SystemLoader from './components/loader/systemLoader/SystemLoader';
 import BottomMobileNavbar from './components/bottomMobileNavbar/BottomMobileNavbar';
-import { Box, Container, Flex, useMediaQuery, useToast } from '@chakra-ui/react';
+import { Container, Flex, useMediaQuery, useToast } from '@chakra-ui/react';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from './slice/UserSlice';

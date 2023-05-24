@@ -1,4 +1,4 @@
-import { Bell, Book, CCircle, Envelope, Gear, House, InfoCircle, Newspaper, QuestionCircle, RCircle, Search, Telephone } from 'react-bootstrap-icons';
+import { Bell, Book, Envelope, Gear, House, InfoCircle, Newspaper, QuestionCircle, RCircle, Search, Telephone } from 'react-bootstrap-icons';
 
 export const SidebarNavItems = [
     {

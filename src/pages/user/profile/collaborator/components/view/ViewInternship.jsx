@@ -7,6 +7,7 @@ import LazyLoad from 'react-lazy-load';
 
 const ViewInternship = ({ userInternship }) => {
     const [mobileScreen] = useMediaQuery('(max-width: 850px)');
+    // eslint-disable-next-line
     const previousLocation = 'Profile';
 
     return (

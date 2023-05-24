@@ -6,6 +6,7 @@ const MultiInputValues = ({ props }) => {
     const toast = useToast();
     const valueRef = useRef([]);
     const inputRef = useRef(null);
+    // eslint-disable-next-line
     const [dataExist, setDataExist] = useState(false);
 
     const handleKeyPress = (event) => {
@@ -69,6 +70,7 @@ const MultiInputValues = ({ props }) => {
         if (valueRef.current.length !== 0) {
             setDataExist(true)
         }
+        // eslint-disable-next-line
     }, [])
 
     useEffect(() => {
@@ -81,6 +83,7 @@ const MultiInputValues = ({ props }) => {
             };
             props.onChange(syntheticEvent);
         }
+        // eslint-disable-next-line
     }, [props.onChange])
 
     return (

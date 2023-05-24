@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import '../../collaborator.css';
 
 const ViewSkill = ({ userSkill, ownerUsername }) => {
+    // eslint-disable-next-line
     const [mobileScreen] = useMediaQuery('(max-width: 850px)');
     const previousLocation = 'Profile';
     const user = useSelector((state) => state.user.value);
