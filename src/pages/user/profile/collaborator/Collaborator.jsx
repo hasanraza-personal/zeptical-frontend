@@ -67,9 +67,9 @@ const Collaborator = ({ ownerUsername }) => {
 
                 <ViewProject ownerUsername={ownerUsername} />
 
-                <ViewAchievement userAchievement={userData.achievement} />
+                <ViewAchievement ownerUsername={ownerUsername} />
 
-                <ViewInternship userInternship={userData.internship} />
+                <ViewInternship ownerUsername={ownerUsername} />
             </>
         )
     } else {

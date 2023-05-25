@@ -6,8 +6,6 @@ const LinkInput = ({ props }) => {
         <>
             <FormControl isRequired={props.isRequired}>
                 <FormLabel mb={0}>{props.label}</FormLabel>
-
-
                 <InputGroup>
                     <InputLeftAddon children='https://' />
                     <Input

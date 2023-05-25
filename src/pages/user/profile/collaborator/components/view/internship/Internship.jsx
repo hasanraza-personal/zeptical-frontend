@@ -1,48 +1,47 @@
-import { Link as ChakraLink, Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Button, Container, Flex, Icon, Image, Stack, useMediaQuery, useToast, useDisclosure } from '@chakra-ui/react';
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Button, Container, Flex, Icon, Image, Stack, useDisclosure, useMediaQuery, useToast } from '@chakra-ui/react';
 import axios from 'axios';
-import React, { useEffect, useRef, useState } from 'react';
-import { Pencil, PlusLg, Trash } from 'react-bootstrap-icons';
+import React, { useEffect, useRef, useState } from 'react'
+import LazyLoad from 'react-lazy-load';
 import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
-import SystemLoader from '../../../../../../../components/loader/systemLoader/SystemLoader';
-import LazyLoad from 'react-lazy-load';
-import NotFoundImage from '../../../../../../../public/images/undraw/not_found.svg';
-import PreviousLocation from '../../../../../../../components/previousLocation/PreviousLocation';
 import { v4 as uuidv4 } from 'uuid';
-import { ExternalLinkIcon } from '@chakra-ui/icons'
+import NotFoundImage from '../../../../../../../public/images/undraw/not_found.svg';
+import SystemLoader from '../../../../../../../components/loader/systemLoader/SystemLoader';
 import Alert from '../../../../../../../components/alert/Alert';
+import PreviousLocation from '../../../../../../../components/previousLocation/PreviousLocation';
+import { Pencil, PlusLg, Trash } from 'react-bootstrap-icons';
 
-const Project = () => {
+const Internship = () => {
     /* cannot use ownerCredentials.username (ownerUsername when passed as props) 
     because this is page which gets rendered after a link is clicked */
     const location = useLocation();
     const path = location.pathname;
     const pathSegments = path.split('/');
-    const username = pathSegments[2]
+    const username = pathSegments[2];
 
     const [mobileScreen] = useMediaQuery('(max-width: 850px)');
     const user = useSelector((state) => state.user.value);
-    const [allProject, setAllProject] = useState([])
+    const [allInternship, setAllInternship] = useState([])
     const toast = useToast();
     const id = uuidv4();
     const [loadCompleted, setLoadCompleted] = useState(false);
     const locationRef = useRef("");
     const [loading, setLoading] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [deleteProjectId, setDeleteProjectId] = useState("");
+    const [deleteInternshipId, setDeleteInternshipId] = useState("");
 
-    const fetchProject = async () => {
+    const fetchInternship = async () => {
         try {
             let response = await axios({
                 method: 'GET',
-                url: `/api/user/profile/${username}/getproject`,
+                url: `/api/user/profile/${username}/getinternship`,
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });
             const data = response.data.result;
-            if (data.project) {
-                setAllProject(data.project);
+            if (data.internship) {
+                setAllInternship(data.internship);
             }
             setLoadCompleted(true);
         } catch (error) {
@@ -57,7 +56,7 @@ const Project = () => {
     }
 
     const handleDelete = async () => {
-        if (deleteProjectId.length === 0) {
+        if (deleteInternshipId.length === 0) {
             toast({
                 position: 'top',
                 title: "Something went wrong. Please refresh the page and try again.",
@@ -72,16 +71,16 @@ const Project = () => {
         try {
             let response = await axios({
                 method: 'POST',
-                url: '/api/user/profile/deleteproject',
+                url: '/api/user/profile/deleteinternship',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 },
-                data: { projectId: deleteProjectId }
+                data: { internshipId: deleteInternshipId }
             });
 
-            let newProject = allProject.filter(element => element._id !== deleteProjectId);
-            setDeleteProjectId("");
+            let newInternship = allInternship.filter(element => element._id !== deleteInternshipId);
+            setDeleteInternshipId("");
             setTimeout(() => {
                 toast({
                     position: 'top',
@@ -92,7 +91,7 @@ const Project = () => {
                 });
                 setLoading(false);
                 onClose();
-                setAllProject(newProject);
+                setAllInternship(newInternship);
             }, 1000)
         } catch (error) {
             setLoading(false)
@@ -106,12 +105,12 @@ const Project = () => {
         }
     }
 
-    const handleLimitProject = () => {
+    const handleLimitInternship = () => {
         if (!toast.isActive(id)) {
             toast({
                 id,
                 position: 'top',
-                title: "You can add upto 5 projects only",
+                title: "You can add upto 5 internships only",
                 status: 'error',
                 duration: 5000,
                 isClosable: true,
@@ -119,16 +118,16 @@ const Project = () => {
         }
     }
 
-    const openDeleteAlert = (projectId) => {
+    const openDeleteAlert = (internshipId) => {
         onOpen();
-        setDeleteProjectId(projectId)
+        setDeleteInternshipId(internshipId)
     }
 
     useEffect(() => {
         if (location.state) {
             locationRef.current = location.state;
         }
-        fetchProject();
+        fetchInternship();
         // eslint-disable-next-line
     }, []);
 
@@ -151,10 +150,10 @@ const Project = () => {
                 <Alert props={{
                     isOpen,
                     onClose,
-                    titleText: "Delete Project",
-                    bodyText: "Are you sure? You want to delete this project. You can't undo this action afterwards.",
+                    titleText: "Delete Internship",
+                    bodyText: "Are you sure? You want to delete this internship. You can't undo this action afterwards.",
                     leftBtnText: "Close",
-                    rightBtnText: "Delete Project",
+                    rightBtnText: "Delete Intenship",
                     rightBtnFn: handleDelete,
                     loading,
                     loadingText: "Deleting"
@@ -166,18 +165,18 @@ const Project = () => {
                     </Box>
 
                     {user.globalUsername === username &&
-                        allProject.length < 5 ? <>
+                        allInternship.length < 5 ? <>
                         <Flex justifyContent='end'>
                             <Button
                                 as={Link}
-                                to={`/user/${username}/editproject`}
-                                state={{ projectId: null }}
+                                to={`/user/${username}/editinternship`}
+                                state={{ internshipId: null }}
                                 size='sm'
                                 gap={2}
                                 className='zeptical-original-fill-button'
                             >
                                 <Icon as={PlusLg} />
-                                <Box>Add Your Project</Box>
+                                <Box>Add Your Internship</Box>
                             </Button>
                         </Flex>
                     </> : <>
@@ -186,23 +185,23 @@ const Project = () => {
                                 size='sm'
                                 gap={2}
                                 className='zeptical-original-fill-button'
-                                onClick={handleLimitProject}
+                                onClick={handleLimitInternship}
                             >
                                 <Icon as={PlusLg} />
-                                <Box>Add Your Project</Box>
+                                <Box>Add Your Internship</Box>
                             </Button>
                         </Flex>
                     </>
                     }
 
-                    {allProject.length !== 0 ? <>
+                    {allInternship.length !== 0 ? <>
                         <Accordion defaultIndex={[0]} allowMultiple mt={4}>
-                            {allProject.map((project, index) => (
+                            {allInternship.map((internship, index) => (
                                 <AccordionItem mb={2} border='1px solid #E2E8F0' borderRadius='5px' key={index}>
                                     <h2>
                                         <AccordionButton>
                                             <Flex justifyContent='space-between' w='100%'>
-                                                <Box>{project.name}</Box>
+                                                <Box>{internship.companyName}</Box>
                                                 <AccordionIcon />
                                             </Flex>
                                         </AccordionButton>
@@ -212,53 +211,39 @@ const Project = () => {
                                             <Stack gap={1}>
                                                 <Flex justifyContent='space-between'>
                                                     <Box>
-                                                        <Box>Project name</Box>
-                                                        <Box>{project.name}</Box>
+                                                        <Box>Company name</Box>
+                                                        <Box>{internship.companyName}</Box>
                                                     </Box>
                                                     <Flex gap={4}>
                                                         <Link
                                                             as={Link}
-                                                            to={`/user/${username}/editproject`}
-                                                            state={{ projectId: project._id }}
+                                                            to={`/user/${username}/editinternship`}
+                                                            state={{ internshipId: internship._id }}
                                                         >
                                                             <Icon as={Pencil} cursor='pointer' color='blue' fontSize={18} />
                                                         </Link>
-                                                        <Icon as={Trash} cursor='pointer' color='red' fontSize={18} onClick={() => openDeleteAlert(project._id)} />
+                                                        <Icon as={Trash} cursor='pointer' color='red' fontSize={18} onClick={() => openDeleteAlert(internship._id)} />
                                                     </Flex>
                                                 </Flex>
                                                 <Box>
-                                                    <Box>Project description</Box>
-                                                    <Box>{project.description}</Box>
+                                                    <Box>Internship duration</Box>
+                                                    <Box>{internship.duration}</Box>
                                                 </Box>
-                                                <Box>
-                                                    <Box>Project Link</Box>
-                                                    {
-                                                        project.projectLink ? <>
-                                                            <ChakraLink href={`https://${project.projectLink}`} isExternal>
-                                                                https://{project.projectLink} <ExternalLinkIcon mx='2px' />
-                                                            </ChakraLink>
-                                                        </> : <>
-                                                            <Box>{"Not provided"}</Box>
-                                                        </>
-                                                    }
 
-                                                </Box>
                                                 <Box>
-                                                    <Box>Github Link</Box>
-                                                    {
-                                                        project.githubLink ? <>
-                                                            <ChakraLink href={`https://${project.githubLink}`} isExternal>
-                                                                https://{project.githubLink} <ExternalLinkIcon mx='2px' />
-                                                            </ChakraLink>
-                                                        </> : <>
-                                                            <Box>{"Not provided"}</Box>
-                                                        </>
-                                                    }
+                                                    <Box>Internship stipends</Box>
+                                                    <Box>{internship.stipends}</Box>
                                                 </Box>
+
                                                 <Box>
-                                                    <Box className='body-label'>Project photo</Box>
+                                                    <Box>Internship description</Box>
+                                                    <Box>{internship.description}</Box>
+                                                </Box>
+
+                                                <Box>
+                                                    <Box className='body-label'>Internship certificate</Box>
                                                     <Flex justifyContent='center' h='200px' border='2px dashed #5b00ff'>
-                                                        <Image src={project.photo} h='100%' />
+                                                        <Image src={internship.certificate} h='100%' />
                                                     </Flex>
                                                 </Box>
                                             </Stack>
@@ -288,4 +273,4 @@ const Project = () => {
     }
 }
 
-export default Project
+export default Internship

@@ -114,5 +114,8 @@
 	font-family: var(--semiBold-font);
 }
 
+.important_field_mark{
+	color: red;
+}
 
 /* ----------------- */

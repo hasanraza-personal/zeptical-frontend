@@ -39,8 +39,8 @@ const ProductPhotoInput = ({ props }) => {
 
     return (
         <>
-            <FormControl isRequired={props.isRequired}>
-                <FormLabel>{props.label}</FormLabel>
+            <FormControl>
+                <FormLabel>{props.label}<span className='important_field_mark'> *</span></FormLabel>
                 <Box width='100%'>
                     <Input type='file' accept="image/*" name={props.name} className={styles.project_uploader_input} onChange={changeProductPhoto} />
                     <Box className={styles.project_uploader_mask}>

@@ -12,7 +12,7 @@ const Alert = ({ props }) => {
                 onClose={props.onClose}
             >
                 <AlertDialogOverlay>
-                    <AlertDialogContent>
+                    <AlertDialogContent mx={2}>
                         <AlertDialogHeader fontSize='lg' fontWeight='bold'>
                             {props.titleText}
                         </AlertDialogHeader>

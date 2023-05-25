@@ -34,7 +34,7 @@ const ViewProject = ({ ownerUsername }) => {
                         textDecoration='underline'
                         state={{ previousLocation }}
                     >
-                        Click to view your project
+                        Click to view project
                     </Flex>
                 </Box>
 

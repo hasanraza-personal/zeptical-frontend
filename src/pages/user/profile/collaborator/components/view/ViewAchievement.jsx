@@ -3,10 +3,10 @@ import React from 'react';
 import { TrophyFill } from 'react-bootstrap-icons';
 import LazyLoad from 'react-lazy-load';
 import AchievementImage from '../../../../../../public/images/achievement.png';
+import { Link } from 'react-router-dom';
 
-const ViewAchievement = ({ userAchievement }) => {
+const ViewAchievement = ({ ownerUsername }) => {
     const [mobileScreen] = useMediaQuery('(max-width: 850px)');
-    // eslint-disable-next-line
     const previousLocation = 'Profile';
 
     return (
@@ -17,15 +17,6 @@ const ViewAchievement = ({ userAchievement }) => {
                         <Icon as={TrophyFill} />
                         <Box>Achievement</Box>
                     </Flex>
-
-                    {/* <Flex
-                        as={Link}
-                        to='/user/editcollaborator'
-                        state={{ pageType: "locationDetails", previousLocation, userLocation }}
-                        alignItems='center'
-                    >
-                        <Icon as={userLocation ? Pencil : PlusLg} />
-                    </Flex> */}
                 </Flex>
 
                 <Divider className='container-divider' />
@@ -34,21 +25,19 @@ const ViewAchievement = ({ userAchievement }) => {
                     <Flex as={LazyLoad} justifyContent='center'>
                         <Image src={AchievementImage} w={mobileScreen ? 90 : 100} />
                     </Flex>
-                    <Box textAlign='center' mt={1} textDecoration='underline'>Click to view your achievement</Box>
+                    <Flex
+                        justifyContent='center'
+                        as={Link}
+                        to={`/user/${ownerUsername}/achievement`}
+                        textAlign='center'
+                        mt={1}
+                        textDecoration='underline'
+                        state={{ previousLocation }}
+                    >
+                        Click to view achievement
+                    </Flex>
                 </Box>
 
-                {/* <Box>
-                    <Stack gap={1}>
-                        <Box>
-                            <Box>City</Box>
-                            <Box>{userLocation?.userCity}</Box>
-                        </Box>
-                        <Box>
-                            <Box>State</Box>
-                            <Box>{userLocation?.userState}</Box>
-                        </Box>
-                    </Stack>
-                </Box> */}
             </Box>
         </>
     )

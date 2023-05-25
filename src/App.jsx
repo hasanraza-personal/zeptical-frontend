@@ -23,6 +23,10 @@ const EditUserProfile = React.lazy(() => import('./pages/user/profile/editProfil
 const EditCollaborator = React.lazy(() => import('./pages/user/profile/collaborator/components/edit/EditCollaborator'));
 const CollaboratorProject = React.lazy(() => import('./pages/user/profile/collaborator/components/view/project/Project'));
 const EditCollaboratorProject = React.lazy(() => import('./pages/user/profile/collaborator/components/edit/project/EditProject'));
+const CollaboratorAchievement = React.lazy(() => import('./pages/user/profile/collaborator/components/view/achievement/Achievement'));
+const EditCollaboratorAchievement = React.lazy(() => import('./pages/user/profile/collaborator/components/edit/achievement/EditAchievement'));
+const CollaboratorInternship = React.lazy(() => import('./pages/user/profile/collaborator/components/view/internship/Internship'));
+const EditCollaboratorInternship = React.lazy(() => import('./pages/user/profile/collaborator/components/edit/internship/EditInternship'));
 
 function App() {
 	const [mobileScreen] = useMediaQuery('(max-width: 850px)');
@@ -111,6 +115,10 @@ function App() {
 								<Route path='editcollaborator' element={<EditCollaborator />} />
 								<Route path=':username/project' element={<CollaboratorProject />} />
 								<Route path=':username/editproject' element={<EditCollaboratorProject />} />
+								<Route path=':username/achievement' element={<CollaboratorAchievement />} />
+								<Route path=':username/editachievement' element={<EditCollaboratorAchievement />} />
+								<Route path=':username/internship' element={<CollaboratorInternship />} />
+								<Route path=':username/editinternship' element={<EditCollaboratorInternship />} />
 								{/* <Route path='collaborator' element={<CollaboratorProfile />} />
 
 							<Route path='startupidea' element={<StartupIdeaProfile />} />
