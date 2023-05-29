@@ -23,14 +23,14 @@ const ViewAchievement = ({ ownerUsername }) => {
 
                 <Box py={2}>
                     <Flex as={LazyLoad} justifyContent='center'>
-                        <Image src={AchievementImage} w={mobileScreen ? 90 : 100} />
+                        <Image src={AchievementImage} w={mobileScreen ? 75 : 100} />
                     </Flex>
                     <Flex
                         justifyContent='center'
                         as={Link}
                         to={`/user/${ownerUsername}/achievement`}
                         textAlign='center'
-                        mt={1}
+                        mt={2}
                         textDecoration='underline'
                         state={{ previousLocation }}
                     >

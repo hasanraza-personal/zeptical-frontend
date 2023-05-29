@@ -201,7 +201,7 @@ const Internship = () => {
                                     <h2>
                                         <AccordionButton>
                                             <Flex justifyContent='space-between' w='100%'>
-                                                <Box>{internship.companyName}</Box>
+                                                <Box className='accordian_title'>{internship.companyName}</Box>
                                                 <AccordionIcon />
                                             </Flex>
                                         </AccordionButton>

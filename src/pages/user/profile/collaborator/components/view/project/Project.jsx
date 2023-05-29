@@ -202,7 +202,7 @@ const Project = () => {
                                     <h2>
                                         <AccordionButton>
                                             <Flex justifyContent='space-between' w='100%'>
-                                                <Box>{project.name}</Box>
+                                                <Box className='accordian_title'>{project.name}</Box>
                                                 <AccordionIcon />
                                             </Flex>
                                         </AccordionButton>

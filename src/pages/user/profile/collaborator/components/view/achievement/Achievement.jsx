@@ -201,7 +201,7 @@ const Achievement = () => {
                                     <h2>
                                         <AccordionButton>
                                             <Flex justifyContent='space-between' w='100%'>
-                                                <Box>{achievement.name}</Box>
+                                                <Box className='accordian_title'>{achievement.name}</Box>
                                                 <AccordionIcon />
                                             </Flex>
                                         </AccordionButton>

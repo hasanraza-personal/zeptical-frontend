@@ -50,6 +50,18 @@
 	color: #eb3838 !important;
 }
 
+.zeptical-red-empty-button {
+	border: 1px solid #eb3838 !important;
+	background-color: #fff !important;
+	color: #eb3838 !important;
+	font-family: var(--bold-font) !important;
+}
+
+.zeptical-red-empty-button:hover {
+	background-color: #eb3838 !important;
+	color: #fff !important;
+}
+
 .zeptical-original-fill-button {
 	background-color: #5B00FF !important;
 	color: #fff !important;

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import Information1 from './components/view/Information1'
 import axios from 'axios';
 import { Container, useMediaQuery, useToast } from '@chakra-ui/react';
 import ViewLocation from './components/view/ViewLocation';
@@ -11,6 +10,9 @@ import ViewInternship from './components/view/ViewInternship';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import SystemLoader from '../../../../components/loader/systemLoader/SystemLoader';
+import UserProfileInformation from './components/view/UserProfileInformation';
+import CollaboratorOption from './components/view/CollaboratorOption';
+
 
 const Collaborator = ({ ownerUsername }) => {
     // eslint-disable-next-line 
@@ -56,8 +58,10 @@ const Collaborator = ({ ownerUsername }) => {
         return (
             <>
                 {user.globalUsername === ownerUsername &&
-                    <Information1 />
+                    <UserProfileInformation />
                 }
+
+                <CollaboratorOption ownerUsername={ownerUsername} />
 
                 <ViewLocation userData={userData.location} ownerUsername={ownerUsername} />
 
@@ -70,6 +74,7 @@ const Collaborator = ({ ownerUsername }) => {
                 <ViewAchievement ownerUsername={ownerUsername} />
 
                 <ViewInternship ownerUsername={ownerUsername} />
+
             </>
         )
     } else {

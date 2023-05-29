@@ -18,30 +18,30 @@ const Infromation = () => {
                 <Container maxW='xl'>
                     <PreviousLocation props={{ location: previousLocation }} />
 
-                    <Box boxShadow={!mobileScreen && 'xs'} mt={!mobileScreen && '10px'} p={!mobileScreen && '10px 15px'}>
-                        <Accordion defaultIndex={[0]} allowMultiple>
-                            <VStack spacing={2} mt={2}>
-                                {infoData.map((data, index) => (
-                                    <AccordionItem className={styles.accordion} key={index}>
-                                        <h2>
-                                            <AccordionButton>
-                                                <Box className={styles.title}>
-                                                    {data.title}
-                                                </Box>
-                                                <AccordionIcon />
-                                            </AccordionButton>
-                                        </h2>
-                                        <AccordionPanel pb={4}>
-                                            <Flex as={LazyLoad} justifyContent='center' my={6}>
-                                                <Image src={data.image} w={data.width} />
-                                            </Flex>
-                                            <Box className={styles.desc}>{data.desc}</Box>
-                                        </AccordionPanel>
-                                    </AccordionItem>
-                                ))}
-                            </VStack>
-                        </Accordion>
-                    </Box>
+                    {/* <Box boxShadow={!mobileScreen && 'xs'} mt={!mobileScreen && '10px'} p={!mobileScreen && '10px 15px'}> */}
+                    <Accordion defaultIndex={[0]} allowMultiple>
+                        <VStack spacing={2} mt={2}>
+                            {infoData.map((data, index) => (
+                                <AccordionItem className={styles.accordion} key={index}>
+                                    <h2>
+                                        <AccordionButton>
+                                            <Box className={styles.title}>
+                                                {data.title}
+                                            </Box>
+                                            <AccordionIcon />
+                                        </AccordionButton>
+                                    </h2>
+                                    <AccordionPanel pb={4}>
+                                        <Flex as={LazyLoad} justifyContent='center' my={6}>
+                                            <Image src={data.image} w={data.width} />
+                                        </Flex>
+                                        <Box className={styles.desc}>{data.desc}</Box>
+                                    </AccordionPanel>
+                                </AccordionItem>
+                            ))}
+                        </VStack>
+                    </Accordion>
+                    {/* </Box> */}
                 </Container>
             </>
         )

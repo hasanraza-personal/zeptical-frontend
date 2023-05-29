@@ -5,7 +5,7 @@ import CurisiotyImage from '../../../../../../public/images/curiosity.png';
 import LazyLoad from 'react-lazy-load';
 import showImage from '../../../../../../public/images/undraw/show.svg';
 
-const Information1 = () => {
+const UserProfileInformation = () => {
     const previousLocation = "Profile";
     const infoData = [
         {
@@ -38,4 +38,4 @@ const Information1 = () => {
     )
 }
 
-export default Information1
+export default UserProfileInformation

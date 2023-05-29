@@ -1,0 +1,34 @@
+.custom_suggestion_box {
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #E2E8F0;
+    border-radius: 5px;
+    max-height: 250px;
+    overflow: scroll;
+}
+
+.custom_suggestion_element {
+    padding: 5px 15px;
+    border-bottom: 1px solid #E2E8F0;
+    cursor: pointer;
+}
+
+.custom_suggestion_element:hover {
+    background-color: #5B00FF;
+    color: #fff;
+}
+
+.custom_suggestion_element:active {
+    background-color: #5B00FF;
+    color: #fff;
+}
+
+.tag{
+    border: 1px solid #5B00FF !important;
+	color: #fff !important;
+	background-color: #5B00FF !important;
+	margin: 2px 2px;
+    font-weight: bold;
+}
