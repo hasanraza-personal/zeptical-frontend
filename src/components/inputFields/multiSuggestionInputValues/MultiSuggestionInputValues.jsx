@@ -29,7 +29,7 @@ const MultiSuggestInputValues = ({ props }) => {
         setShowSuggestion(true)
     }
 
-    const selectSuggestion = async (selectedValue) => {
+    const selectSuggestion = (selectedValue) => {
         if (selectedValue.trim().length !== 0) {
             const foundIndex = props.value.findIndex(element => element.trim().toLowerCase() === selectedValue.trim().toLowerCase());
 

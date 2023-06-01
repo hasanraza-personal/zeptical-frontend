@@ -172,6 +172,7 @@ const EditSkill = () => {
                         placeholder: "JavaScript",
                         value: credentials.skill,
                         setCredentials: setCredentials,
+                        credentials: credentials,
                         setSelectedSuggestion: setSelectedSuggestion,
                         data: skillData
                     }} />

@@ -1,9 +1,10 @@
-import { Box, Button, Container, VStack, useMediaQuery, useToast } from '@chakra-ui/react';
+import { Box, Button, Container, Stack, VStack, useMediaQuery, useToast } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react'
 import TextInput from '../../../../../../../components/inputFields/textInput/TextInput';
 import axios from 'axios';
 import SystemLoader from '../../../../../../../components/loader/systemLoader/SystemLoader';
 import { useNavigate } from 'react-router-dom';
+import SuggestionInput from '../../../../../../../components/inputFields/suggestionInput/SuggestionInput';
 
 const EditEducation = () => {
     const [mobileScreen] = useMediaQuery('(max-width: 850px)');
@@ -11,36 +12,28 @@ const EditEducation = () => {
     const toast = useToast();
     const [loadCompleted, setLoadCompleted] = useState(false);
     const navigate = useNavigate();
+    const [boardData, setBoardData] = useState([]);
+    const [schoolData, setSchoolData] = useState([]);
+    const [collegeData, setCollegeData] = useState([]);
+    const [streamData, setStreamData] = useState([]);
     const [credentials, setCredentials] = useState({
-        ssc: {
-            board: "",
-            schoolName: ""
-        },
-        hsc: {
-            board: "",
-            collegeName: ""
-        },
-        diploma: {
-            stream: "",
-            collegeName: ""
-        },
-        degree: {
-            stream: "",
-            collegeName: ""
-        },
+        sscBoard: "",
+        sscSchoolName: "",
+        hscBoard: "",
+        hscCollegeName: "",
+        diplomaStream: "",
+        diplomaCollegeName: "",
+        degreeStream: "",
+        degreeCollegeName: ""
     });
-
-    const onChange = (e) => {
-        let category = e.target.name.split('.')[0];
-        let field = e.target.name.split('.')[1];
-
-        setCredentials({ ...credentials, [category]: { ...credentials[category], [field]: e.target.value } });
-    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if ((credentials.ssc.board.length === 0 && credentials.ssc.schoolName.length === 0) && (credentials.hsc.board.length === 0 && credentials.hsc.collegeName.length === 0) && (credentials.diploma.stream.length === 0 && credentials.diploma.collegeName.length === 0) && (credentials.degree.stream.length === 0 && credentials.degree.collegeName.length === 0)) {
+        if ((credentials.sscBoard.length === 0 && credentials.sscSchoolName.length === 0) &&
+            (credentials.hscBoard.length === 0 && credentials.hscCollegeName.length === 0) &&
+            (credentials.diplomaStream.length === 0 && credentials.diplomaCollegeName.length === 0) &&
+            (credentials.degreeStream.length === 0 && credentials.degreeCollegeName.length === 0)) {
             toast({
                 position: 'top',
                 title: "Please provide atleast one educational information",
@@ -52,7 +45,7 @@ const EditEducation = () => {
         }
 
         // SSC 
-        if ((credentials.ssc.board.length === 0 && credentials.ssc.schoolName.length !== 0) || (credentials.ssc.board.length !== 0 && credentials.ssc.schoolName.length === 0)) {
+        if ((credentials.sscBoard.length === 0 && credentials.sscSchoolName.length !== 0) || (credentials.sscBoard.length !== 0 && credentials.sscSchoolName.length === 0)) {
             toast({
                 position: 'top',
                 title: "Please provide your SSC school name and board name",
@@ -64,7 +57,7 @@ const EditEducation = () => {
         }
 
         // HSC 
-        if ((credentials.hsc.board.length === 0 && credentials.hsc.collegeName.length !== 0) || (credentials.hsc.board.length !== 0 && credentials.hsc.collegeName.length === 0)) {
+        if ((credentials.hscBoard.length === 0 && credentials.hscCollegeName.length !== 0) || (credentials.hscBoard.length !== 0 && credentials.hscCollegeName.length === 0)) {
             toast({
                 position: 'top',
                 title: "Please provide your HSC college name and board name",
@@ -76,7 +69,7 @@ const EditEducation = () => {
         }
 
         // Diploma 
-        if ((credentials.diploma.stream.length === 0 && credentials.diploma.collegeName.length !== 0) || (credentials.diploma.stream.length !== 0 && credentials.diploma.collegeName.length === 0)) {
+        if ((credentials.diplomaStream.length === 0 && credentials.diplomaCollegeName.length !== 0) || (credentials.diplomaStream.length !== 0 && credentials.diplomaCollegeName.length === 0)) {
             toast({
                 position: 'top',
                 title: "Please provide your Diploma college name and stream name",
@@ -88,7 +81,7 @@ const EditEducation = () => {
         }
 
         // Degree 
-        if ((credentials.degree.stream.length === 0 && credentials.degree.collegeName.length !== 0) || (credentials.degree.stream.length !== 0 && credentials.degree.collegeName.length === 0)) {
+        if ((credentials.degreeStream.length === 0 && credentials.degreeCollegeName.length !== 0) || (credentials.degreeStream.length !== 0 && credentials.degreeCollegeName.length === 0)) {
             toast({
                 position: 'top',
                 title: "Please provide your Degree college name and stream name",
@@ -98,8 +91,191 @@ const EditEducation = () => {
             });
         }
 
-
         setLoading(true);
+
+        // Save SSC board
+        if (credentials.sscBoard.length !== 0) {
+            try {
+                await axios({
+                    method: 'POST',
+                    url: '/api/extras/addboard',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    data: { board: credentials.sscBoard }
+                });
+            } catch (error) {
+                toast({
+                    position: 'top',
+                    title: error.response.data.msg,
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
+            }
+        }
+
+        // Save HSC board
+        if (credentials.hscBoard.length !== 0) {
+            try {
+                await axios({
+                    method: 'POST',
+                    url: '/api/extras/addboard',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    data: { board: credentials.hscBoard }
+                });
+            } catch (error) {
+                toast({
+                    position: 'top',
+                    title: error.response.data.msg,
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
+            }
+        }
+
+        // Save SSC school name
+        if (credentials.sscSchoolName.length !== 0) {
+            try {
+                await axios({
+                    method: 'POST',
+                    url: '/api/extras/addschool',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    data: { school: credentials.sscSchoolName }
+                });
+            } catch (error) {
+                toast({
+                    position: 'top',
+                    title: error.response.data.msg,
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
+            }
+        }
+
+        // Save HSC college name
+        if (credentials.hscCollegeName.length !== 0) {
+            try {
+                await axios({
+                    method: 'POST',
+                    url: '/api/extras/addcollege',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    data: { college: credentials.hscCollegeName }
+                });
+            } catch (error) {
+                toast({
+                    position: 'top',
+                    title: error.response.data.msg,
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
+            }
+        }
+
+        // Save Diploma stream
+        if (credentials.diplomaStream.length !== 0) {
+            try {
+                await axios({
+                    method: 'POST',
+                    url: '/api/extras/addstream',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    data: { stream: credentials.diplomaStream }
+                });
+            } catch (error) {
+                toast({
+                    position: 'top',
+                    title: error.response.data.msg,
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
+            }
+        }
+
+        // Save Degree stream
+        if (credentials.degreeStream.length !== 0) {
+            try {
+                await axios({
+                    method: 'POST',
+                    url: '/api/extras/addstream',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    data: { stream: credentials.degreeStream }
+                });
+            } catch (error) {
+                toast({
+                    position: 'top',
+                    title: error.response.data.msg,
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
+            }
+        }
+
+        // Save Diploma college name
+        if (credentials.diplomaCollegeName.length !== 0) {
+            try {
+                await axios({
+                    method: 'POST',
+                    url: '/api/extras/addcollege',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    data: { college: credentials.diplomaCollegeName }
+                });
+            } catch (error) {
+                toast({
+                    position: 'top',
+                    title: error.response.data.msg,
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
+            }
+        }
+
+         // Save Degree college name
+         if (credentials.degreeCollegeName.length !== 0) {
+            try {
+                await axios({
+                    method: 'POST',
+                    url: '/api/extras/addcollege',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    data: { college: credentials.degreeCollegeName }
+                });
+            } catch (error) {
+                toast({
+                    position: 'top',
+                    title: error.response.data.msg,
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
+            }
+        }
 
         try {
             let response = await axios({
@@ -109,7 +285,16 @@ const EditEducation = () => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 },
-                data: { ssc: credentials.ssc, hsc: credentials.hsc, diploma: credentials.diploma, degree: credentials.degree }
+                data: {
+                    sscBoard: credentials.sscBoard,
+                    sscSchoolName: credentials.sscSchoolName,
+                    hscBoard: credentials.hscBoard,
+                    hscCollegeName: credentials.hscCollegeName,
+                    diplomaStream: credentials.diplomaStream,
+                    diplomaCollegeName: credentials.diplomaCollegeName,
+                    degreeStream: credentials.degreeStream,
+                    degreeCollegeName: credentials.degreeCollegeName
+                }
             });
 
             setTimeout(() => {
@@ -136,7 +321,7 @@ const EditEducation = () => {
 
     }
 
-    const fetchUserLocation = async () => {
+    const fetchUserEducation = async () => {
         try {
             let response = await axios({
                 method: 'GET',
@@ -149,57 +334,16 @@ const EditEducation = () => {
             const data = response.data.user;
 
             if (data.education) {
-                let tempCredentials = {};
-
-                if (data.education.ssc) {
-                    tempCredentials.ssc = {
-                        board: data.education.ssc.board,
-                        schoolName: data.education.ssc.schoolName,
-                    };
-                } else {
-                    tempCredentials.ssc = {
-                        board: "",
-                        schoolName: "",
-                    };
-                }
-
-                if (data.education.hsc) {
-                    tempCredentials.hsc = {
-                        board: data.education.hsc.board,
-                        collegeName: data.education.hsc.collegeName
-                    };
-                } else {
-                    tempCredentials.hsc = {
-                        board: "",
-                        collegeName: ""
-                    };
-                }
-
-                if (data.education.diploma) {
-                    tempCredentials.diploma = {
-                        stream: data.education.diploma.stream,
-                        collegeName: data.education.diploma.collegeName
-                    };
-                } else {
-                    tempCredentials.diploma = {
-                        stream: "",
-                        collegeName: ""
-                    };
-                }
-
-                if (data.education.degree) {
-                    tempCredentials.degree = {
-                        stream: data.education.degree.stream,
-                        collegeName: data.education.degree.collegeName
-                    };
-                } else {
-                    tempCredentials.degree = {
-                        stream: "",
-                        collegeName: ""
-                    };
-                }
-
-                setCredentials(tempCredentials);
+                setCredentials({
+                    sscBoard: data.education.sscBoard,
+                    sscSchoolName: data.education.sscSchoolName,
+                    hscBoard: data.education.hscBoard,
+                    hscCollegeName: data.education.hscCollegeName,
+                    diplomaStream: data.education.diplomaStream,
+                    diplomaCollegeName: data.education.diplomaCollegeName,
+                    degreeStream: data.education.degreeStream,
+                    degreeCollegeName: data.education.degreeCollegeName
+                });
             }
             setLoadCompleted(true);
         } catch (error) {
@@ -213,8 +357,108 @@ const EditEducation = () => {
         }
     }
 
+    // Fetch board
+    const fetchBoard = async () => {
+        try {
+            let response = await axios({
+                method: 'GET',
+                url: `/api/extras/getboard`,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+            });
+            const data = response.data.result;
+            setBoardData(data)
+        } catch (error) {
+            toast({
+                position: 'top',
+                title: error.response.data.msg,
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            });
+        }
+    }
+
+    // Fetch school
+    const fetchSchool = async () => {
+        try {
+            let response = await axios({
+                method: 'GET',
+                url: `/api/extras/getschool`,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+            });
+            const data = response.data.result;
+            setSchoolData(data)
+        } catch (error) {
+            toast({
+                position: 'top',
+                title: error.response.data.msg,
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            });
+        }
+    }
+
+    // Fetch college
+    const fetchCollege = async () => {
+        try {
+            let response = await axios({
+                method: 'GET',
+                url: `/api/extras/getcollege`,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+            });
+            const data = response.data.result;
+            setCollegeData(data)
+        } catch (error) {
+            toast({
+                position: 'top',
+                title: error.response.data.msg,
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            });
+        }
+    }
+
+    // Fetch stream
+    const fetchStream = async () => {
+        try {
+            let response = await axios({
+                method: 'GET',
+                url: `/api/extras/getstream`,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+            });
+            const data = response.data.result;
+            setStreamData(data)
+        } catch (error) {
+            toast({
+                position: 'top',
+                title: error.response.data.msg,
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            });
+        }
+    }
+
     useEffect(() => {
-        fetchUserLocation();
+        fetchUserEducation();
+        fetchBoard();
+        fetchSchool();
+        fetchCollege();
+        fetchStream();
         // eslint-disable-next-line
     }, []);
 
@@ -226,25 +470,29 @@ const EditEducation = () => {
                     {/* SSC details */}
                     <Box boxShadow='xs' borderRadius={8} p='14px 12px'>
                         <Box fontFamily='var(--semiBold-font)'>SSC details</Box>
-                        <VStack gap={0.5} mt={2}>
-                            <TextInput props={{
+                        <Stack gap={0.5} mt={2}>
+                            <SuggestionInput props={{
                                 isRequired: true,
                                 label: "Board name",
                                 placeholder: "Maharashtra Board",
-                                name: "ssc.board",
-                                value: credentials.ssc.board,
-                                onChange: onChange
+                                name: "sscBoard",
+                                value: credentials.sscBoard,
+                                setCredentials: setCredentials,
+                                credentials: credentials,
+                                data: boardData
                             }} />
 
-                            <TextInput props={{
+                            <SuggestionInput props={{
                                 isRequired: true,
                                 label: "School name",
                                 placeholder: "Don Bosco High School",
-                                name: "ssc.schoolName",
-                                value: credentials.ssc.schoolName,
-                                onChange: onChange
+                                name: "sscSchoolName",
+                                value: credentials.sscSchoolName,
+                                setCredentials: setCredentials,
+                                credentials: credentials,
+                                data: schoolData
                             }} />
-                        </VStack>
+                        </Stack>
                     </Box>
 
                     <br />
@@ -252,25 +500,29 @@ const EditEducation = () => {
                     {/* HSC details */}
                     <Box boxShadow='xs' borderRadius={8} p='14px 12px'>
                         <Box fontFamily='var(--semiBold-font)'>HSC details</Box>
-                        <VStack gap={0.5} mt={2}>
-                            <TextInput props={{
+                        <Stack gap={0.5} mt={2}>
+                            <SuggestionInput props={{
                                 isRequired: true,
                                 label: "Board name",
-                                placeholder: "Mahasashtra Board",
-                                name: "hsc.board",
-                                value: credentials.hsc.board,
-                                onChange: onChange
+                                placeholder: "Maharashtra Board",
+                                name: "hscBoard",
+                                value: credentials.hscBoard,
+                                setCredentials: setCredentials,
+                                credentials: credentials,
+                                data: boardData
                             }} />
 
-                            <TextInput props={{
+                            <SuggestionInput props={{
                                 isRequired: true,
                                 label: "College name",
-                                placeholder: "Nirmala Memorial Foundation College",
-                                name: "hsc.collegeName",
-                                value: credentials.hsc.collegeName,
-                                onChange: onChange
+                                placeholder: "Nirmala Memorial College",
+                                name: "hscCollegeName",
+                                value: credentials.hscCollegeName,
+                                setCredentials: setCredentials,
+                                credentials: credentials,
+                                data: collegeData
                             }} />
-                        </VStack>
+                        </Stack>
                     </Box>
 
                     <br />
@@ -278,25 +530,29 @@ const EditEducation = () => {
                     {/* Diploma details */}
                     <Box boxShadow='xs' borderRadius={8} p='14px 12px'>
                         <Box fontFamily='var(--semiBold-font)'>Diploma details</Box>
-                        <VStack gap={0.5} mt={2}>
-                            <TextInput props={{
+                        <Stack gap={0.5} mt={2}>
+                            <SuggestionInput props={{
                                 isRequired: true,
                                 label: "Stream",
-                                placeholder: "IT",
-                                name: "diploma.stream",
-                                value: credentials.diploma.stream,
-                                onChange: onChange
+                                placeholder: "Computer Engineering",
+                                name: "diplomaStream",
+                                value: credentials.diplomaStream,
+                                setCredentials: setCredentials,
+                                credentials: credentials,
+                                data: streamData
                             }} />
 
-                            <TextInput props={{
+                            <SuggestionInput props={{
                                 isRequired: true,
                                 label: "College name",
-                                placeholder: "Vartak Polytechnic",
-                                name: "diploma.collegeName",
-                                value: credentials.diploma.collegeName,
-                                onChange: onChange
+                                placeholder: "Vartal Polytechnic",
+                                name: "diplomaCollegeName",
+                                value: credentials.diplomaCollegeName,
+                                setCredentials: setCredentials,
+                                credentials: credentials,
+                                data: collegeData
                             }} />
-                        </VStack>
+                        </Stack>
                     </Box>
 
                     <br />
@@ -304,25 +560,29 @@ const EditEducation = () => {
                     {/* Degree details */}
                     <Box boxShadow='xs' borderRadius={8} p='14px 12px'>
                         <Box fontFamily='var(--semiBold-font)'>Degree details</Box>
-                        <VStack gap={0.5} mt={2}>
-                            <TextInput props={{
+                        <Stack gap={0.5} mt={2}>
+                            <SuggestionInput props={{
                                 isRequired: true,
                                 label: "Stream",
-                                placeholder: "IT",
-                                name: "degree.stream",
-                                value: credentials.degree.stream,
-                                onChange: onChange
+                                placeholder: "Information Technology",
+                                name: "degreeStream",
+                                value: credentials.degreeStream,
+                                setCredentials: setCredentials,
+                                credentials: credentials,
+                                data: streamData
                             }} />
 
-                            <TextInput props={{
+                            <SuggestionInput props={{
                                 isRequired: true,
                                 label: "College name",
-                                placeholder: "MHSSCOE",
-                                name: "degree.collegeName",
-                                value: credentials.degree.collegeName,
-                                onChange: onChange
+                                placeholder: "M.H. Saboo Siddik College of Engineering",
+                                name: "degreeCollegeName",
+                                value: credentials.degreeCollegeName,
+                                setCredentials: setCredentials,
+                                credentials: credentials,
+                                data: collegeData
                             }} />
-                        </VStack>
+                        </Stack>
                     </Box>
 
                     <Button

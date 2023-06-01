@@ -12,8 +12,8 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import axios from 'axios';
 import ScrollToTop from './ScrollToTop';
 
-// axios.defaults.baseURL = "http://localhost:5000";
-axios.defaults.baseURL = "https://zeptical.com";
+axios.defaults.baseURL = "http://localhost:5000";
+// axios.defaults.baseURL = "https://zeptical.com";
 
 const store = configureStore({
 	reducer: {

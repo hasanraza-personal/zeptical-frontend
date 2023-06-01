@@ -12,36 +12,36 @@ const ViewEducation = ({ userData, ownerUsername }) => {
 
     const userEducation = [
         {
-            available: userData?.ssc?.board && userData?.ssc?.schoolName ? true : false,
+            available: userData.sscBoard ? true : false,
             heading: "SSC details",
             title1: "Board",
-            value1: userData?.ssc?.board,
+            value1: userData.sscBoard,
             title2: "School name",
-            value2: userData?.ssc?.schoolName,
+            value2: userData.sscSchoolName,
         },
         {
-            available: userData?.hsc?.board && userData?.hsc?.collegeName ? true : false,
+            available: userData.hscBoard ? true : false,
             heading: "HSC details",
             title1: "Board",
-            value1: userData?.hsc?.board,
+            value1: userData.hscBoard,
             title2: "College name",
-            value2: userData?.hsc?.collegeName,
+            value2: userData.hscCollegeName,
         },
         {
-            available: userData?.diploma?.stream && userData?.diploma?.collegeName ? true : false,
+            available: userData.diplomaStream ? true : false,
             heading: "Diploma details",
             title1: "Stream",
-            value1: userData?.diploma?.stream,
+            value1: userData.diplomaStream,
             title2: "College name",
-            value2: userData?.diploma?.collegeName,
+            value2: userData.diplomaCollegeName,
         },
         {
-            available: userData?.degree?.stream && userData?.degree?.collegeName ? true : false,
+            available: userData.degreeStream ? true : false,
             heading: "Degree details",
             title1: "Steam",
-            value1: userData?.degree?.stream,
+            value1: userData.degreeStream,
             title2: "College name",
-            value2: userData?.degree?.collegeName,
+            value2: userData.degreeCollegeName,
         }
     ]
 

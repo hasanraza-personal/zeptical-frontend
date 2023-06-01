@@ -1,9 +1,10 @@
-import { Box, Button, Container, VStack, useMediaQuery, useToast } from '@chakra-ui/react';
+import { Box, Button, Container, Stack, VStack, useMediaQuery, useToast } from '@chakra-ui/react';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import TextInput from '../../../../../../../components/inputFields/textInput/TextInput';
 import SystemLoader from '../../../../../../../components/loader/systemLoader/SystemLoader';
 import { useNavigate } from 'react-router-dom';
+import SuggestionInput from '../../../../../../../components/inputFields/suggestionInput/SuggestionInput';
 
 const EditLocation = () => {
     const [mobileScreen] = useMediaQuery('(max-width: 850px)');
@@ -11,14 +12,12 @@ const EditLocation = () => {
     const toast = useToast();
     const navigate = useNavigate();
     const [loadCompleted, setLoadCompleted] = useState(false);
+    const [cityData, setCityData] = useState([]);
+    const [stateData, setStateData] = useState([]);
     const [credentials, setCredentials] = useState({
         userCity: "",
         userState: "",
     });
-
-    const onChange = (e) => {
-        setCredentials({ ...credentials, [e.target.name]: e.target.value })
-    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -46,6 +45,49 @@ const EditLocation = () => {
         }
         setLoading(true);
 
+        // Save city
+        try {
+            await axios({
+                method: 'POST',
+                url: '/api/extras/addcity',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                data: { city: credentials.userCity }
+            });
+        } catch (error) {
+            toast({
+                position: 'top',
+                title: error.response.data.msg,
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            });
+        }
+
+        // Save state
+        try {
+            await axios({
+                method: 'POST',
+                url: '/api/extras/addstate',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                data: { state: credentials.userState }
+            });
+        } catch (error) {
+            toast({
+                position: 'top',
+                title: error.response.data.msg,
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            });
+        }
+
+        // Update user location
         try {
             let response = await axios({
                 method: 'POST',
@@ -109,8 +151,56 @@ const EditLocation = () => {
         }
     }
 
+    const fetchCity = async () => {
+        try {
+            let response = await axios({
+                method: 'GET',
+                url: `/api/extras/getcity`,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+            });
+            const data = response.data.result;
+            setCityData(data)
+        } catch (error) {
+            toast({
+                position: 'top',
+                title: error.response.data.msg,
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            });
+        }
+    }
+
+    const fetchState = async () => {
+        try {
+            let response = await axios({
+                method: 'GET',
+                url: `/api/extras/getstate`,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+            });
+            const data = response.data.result;
+            setStateData(data)
+        } catch (error) {
+            toast({
+                position: 'top',
+                title: error.response.data.msg,
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            });
+        }
+    }
+
     useEffect(() => {
         fetchUserLocation();
+        fetchCity();
+        fetchState();
         // eslint-disable-next-line
     }, []);
 
@@ -120,25 +210,29 @@ const EditLocation = () => {
                 <Box mt={4} px={4} py={!mobileScreen && 4} boxShadow={!mobileScreen && 'xs'}>
                     <form onSubmit={handleSubmit}>
 
-                        <VStack gap={0.5} mt={4}>
-                            <TextInput props={{
+                        <Stack gap={0.5} mt={4}>
+                            <SuggestionInput props={{
                                 isRequired: true,
                                 label: "City name",
                                 placeholder: "Mumbai",
                                 name: "userCity",
                                 value: credentials.userCity,
-                                onChange: onChange
+                                setCredentials: setCredentials,
+                                credentials: credentials,
+                                data: cityData
                             }} />
 
-                            <TextInput props={{
+                            <SuggestionInput props={{
                                 isRequired: true,
                                 label: "State name",
                                 placeholder: "Maharashtra",
                                 name: "userState",
                                 value: credentials.userState,
-                                onChange: onChange
+                                setCredentials: setCredentials,
+                                credentials: credentials,
+                                data: stateData
                             }} />
-                        </VStack>
+                        </Stack>
 
                         <Button
                             type='submit'
