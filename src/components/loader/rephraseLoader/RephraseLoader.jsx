@@ -1,12 +1,9 @@
 import React from 'react';
-import { CuriosQuotes } from './curiosQuotes';
-import styles from './dynamicinformationloader.module.css';
-import { Box, Modal, ModalContent, ModalOverlay } from '@chakra-ui/react';
+import styles from './rephraseloader.module.css';
+import { Box, Flex, Modal, ModalContent, ModalOverlay, useMediaQuery } from '@chakra-ui/react';
 
-const DynamicInformationLoader = ({ props }) => {
+const RephraseLoader = ({ props }) => {
     const [mobileScreen] = useMediaQuery('(max-width: 850px)');
-    const [quote, setQuote] = useState("");
-    const [changeQuote, setChangeQuote] = useState(1)
 
     return (
         <>
@@ -14,16 +11,16 @@ const DynamicInformationLoader = ({ props }) => {
                 <ModalOverlay />
                 <ModalContent mx={mobileScreen && 4}>
                     <Box px={5} py={7} >
-                        <Flex justifyContent='center'>
+                        <Flex alignItems='center' flexDirection='column'>
                             <div className={styles.typewriter}>
                                 <div className={styles.slide}><i></i></div>
                                 <div className={styles.paper}></div>
                                 <div className={styles.keyboard}></div>
                             </div>
+                            <Box textAlign='center' mt={3} fontSize={17} lineHeight='normal'>
+                                Rephrasing your sentence. Please be patience.
+                            </Box>
                         </Flex>
-                        <Box textAlign='center' mt={5} fontSize={17} lineHeight='normal'>
-                            {quote}
-                        </Box>
                     </Box>
                 </ModalContent>
             </Modal>
@@ -31,4 +28,4 @@ const DynamicInformationLoader = ({ props }) => {
     )
 }
 
-export default DynamicInformationLoader
+export default RephraseLoader

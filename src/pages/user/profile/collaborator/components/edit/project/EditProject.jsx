@@ -1,16 +1,18 @@
-import { Box, Button, Container, Flex, Icon, Image, VStack, useDisclosure, useMediaQuery, useToast } from '@chakra-ui/react';
+import { Box, Button, Container, Flex, Icon, Image, Stack, useDisclosure, useMediaQuery, useToast } from '@chakra-ui/react';
 import React, { useEffect, useRef, useState } from 'react'
-import { ArrowLeft } from 'react-bootstrap-icons';
+import { ArrowLeft, Link45deg } from 'react-bootstrap-icons';
 import LazyLoad from 'react-lazy-load';
 import { useLocation, useNavigate } from 'react-router-dom';
 import NotFoundImage from '../../../../../../../public/images/undraw/not_found.svg';
 import axios from 'axios';
 import TextInput from '../../../../../../../components/inputFields/textInput/TextInput';
 import TextAreaInput from '../../../../../../../components/inputFields/textAreaInput/TextAreaInput';
-import LinkInput from '../../../../../../../components/inputFields/linkInput/LinkInput';
 import ProductPhotoInput from '../../../../../../../components/inputFields/productPhotoInput/ProductPhotoInput';
 import SystemLoader from '../../../../../../../components/loader/systemLoader/SystemLoader';
 import ImageUploadLoader from '../../../../../../../components/loader/imageUploadLoader/ImageUploadLoader';
+import { rephraseSentence } from '../../../../../../../api/rephraseSentence';
+import RephraseLoader from '../../../../../../../components/loader/rephraseLoader/RephraseLoader';
+import LeftIconTextInput from '../../../../../../../components/iconInputFields/leftIconTextInput/LeftIconTextInput';
 
 const EditProject = () => {
     const [mobileScreen] = useMediaQuery('(max-width: 850px)');
@@ -25,6 +27,7 @@ const EditProject = () => {
     const locationRef = useRef("");
     const [imageUploader, setImageUploader] = useState(false);
     const { isOpen: isImageUploader, onOpen: openImageUploader, onClose: closeImageUploader } = useDisclosure();
+    const { isOpen: isRephraseLoader, onOpen: openRephraseLoader, onClose: closeRephraseLoader } = useDisclosure();
     const [credentials, setCredentials] = useState({
         projectId: "",
         name: "",
@@ -33,6 +36,15 @@ const EditProject = () => {
         githubLink: "",
         photo: ""
     });
+
+    const validateURL = (url) => {
+        try {
+            new URL(url);
+            return true;
+        } catch (error) {
+            return false
+        }
+    }
 
     const onChange = (e) => {
         setCredentials({ ...credentials, [e.target.name]: e.target.value })
@@ -73,6 +85,36 @@ const EditProject = () => {
                 isClosable: true,
             });
             return
+        }
+
+        if (credentials.projectLink.trim().length !== 0) {
+            const result = validateURL(credentials.projectLink)
+
+            if (!result) {
+                toast({
+                    position: 'top',
+                    title: "Please provide a valid project link",
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
+                return
+            }
+        }
+
+        if (credentials.githubLink.trim().length !== 0) {
+            const result = validateURL(credentials.githubLink)
+
+            if (!result) {
+                toast({
+                    position: 'top',
+                    title: "Please provide a valid github link",
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
+                return
+            }
         }
 
         if (credentials.photo.length === 0) {
@@ -127,7 +169,10 @@ const EditProject = () => {
                 closeImageUploader();
             }, isImage ? 5000 : 1000)
         } catch (error) {
-            setLoading(false)
+            setPhotoSelected(true);
+            setImageUploader(false);
+            closeImageUploader();
+            setLoading(false);
             toast({
                 position: 'top',
                 title: error.response.data.msg,
@@ -182,6 +227,29 @@ const EditProject = () => {
         }
     }
 
+    const handleRephrase = async () => {
+        if (credentials.description.length < 3) {
+            toast({
+                position: 'top',
+                title: "In order to rephrase the above sentence, your description must include atleast 200 characters.",
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+            });
+            return
+        }
+        setLoading(true)
+        openRephraseLoader();
+
+        const rephrasedSentence = await rephraseSentence(credentials.description);
+
+        setTimeout(() => {
+            setCredentials({ ...credentials, 'description': rephrasedSentence.data });
+            closeRephraseLoader();
+            setLoading(false);
+        }, 5000)
+    }
+
     useEffect(() => {
         if (location.state) {
             locationRef.current = location.state;
@@ -217,6 +285,12 @@ const EditProject = () => {
                     imageUploader
                 }} />
 
+                <RephraseLoader props={{
+                    isOpen: isRephraseLoader,
+                    onOpen: openRephraseLoader,
+                    onClose: closeRephraseLoader,
+                }} />
+
                 <Container maxW='xl' p={0} pb={20}>
                     <Box className='back-navigation-container' onClick={() => navigate(-1)} fontSize={mobileScreen ? '18px' : '22px'}>
                         <Icon as={ArrowLeft} />
@@ -226,7 +300,7 @@ const EditProject = () => {
                     <Box mt={4} px={4} py={!mobileScreen && 4} boxShadow={!mobileScreen && 'xs'}>
                         <form onSubmit={handleSubmit}>
 
-                            <VStack gap={0.5} mt={4}>
+                            <Stack gap={0.5} mt={4}>
                                 <TextInput props={{
                                     isRequired: true,
                                     label: "Project name",
@@ -244,24 +318,47 @@ const EditProject = () => {
                                     value: credentials.description,
                                     onChange: onChange
                                 }} />
+                                <Flex justifyContent='end' w='100%'>
+                                    <Button
+                                        className='zeptical-original-fill-button'
+                                        size='sm'
+                                        onClick={handleRephrase}
+                                        isLoading={loading}
+                                        loadingText="Rephrasing"
+                                    >
+                                        Rephrase it!
+                                    </Button>
+                                </Flex>
 
-                                <LinkInput props={{
-                                    isRequired: false,
-                                    label: "Project link",
-                                    placeholder: "wwww.zeptical.com",
-                                    name: "projectLink",
-                                    value: credentials.projectLink,
-                                    onChange: onChange
-                                }} />
+                                <Box>
+                                    <LeftIconTextInput props={{
+                                        isRequired: false,
+                                        label: "Project link",
+                                        icon: Link45deg,
+                                        placeholder: "https://www.zeptical.com",
+                                        name: "projectLink",
+                                        value: credentials.projectLink,
+                                        onChange: onChange
+                                    }} />
+                                    <Box color='var(--dark-grey-color)' fontSize={14}>
+                                        Ex. https://www.zeptical.com
+                                    </Box>
+                                </Box>
 
-                                <LinkInput props={{
-                                    isRequired: false,
-                                    label: "Github link",
-                                    placeholder: "www.github.com/topics/image-upload",
-                                    name: "githubLink",
-                                    value: credentials.githubLink,
-                                    onChange: onChange
-                                }} />
+                                <Box>
+                                    <LeftIconTextInput props={{
+                                        isRequired: false,
+                                        label: "Github link",
+                                        icon: Link45deg,
+                                        placeholder: "https://github.com/username/zeptical",
+                                        name: "githubLink",
+                                        value: credentials.githubLink,
+                                        onChange: onChange
+                                    }} />
+                                    <Box color='var(--dark-grey-color)' fontSize={14}>
+                                        Ex. https://github.com/username/zeptical
+                                    </Box>
+                                </Box>
 
                                 <ProductPhotoInput props={{
                                     isRequired: true,
@@ -274,7 +371,7 @@ const EditProject = () => {
                                     setPhoto: setPhoto,
                                     setPhotoSelected: setPhotoSelected
                                 }} />
-                            </VStack>
+                            </Stack>
 
                             {photoSelected && !loading &&
                                 <Button mt={2} w='100%' size='sm' onClick={handleRemove}>Remove Selected Photo</Button>

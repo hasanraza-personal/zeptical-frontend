@@ -10,6 +10,7 @@ import PreviousLocation from '../../../../../../../components/previousLocation/P
 import { Pencil, PlusLg, Trash } from 'react-bootstrap-icons';
 import SystemLoader from '../../../../../../../components/loader/systemLoader/SystemLoader';
 import Alert from '../../../../../../../components/alert/Alert';
+import ImageModal from '../../../../../../../components/modal/imageModal/ImageModal';
 
 const Achievement = () => {
     /* cannot use ownerCredentials.username (ownerUsername when passed as props) 
@@ -29,6 +30,9 @@ const Achievement = () => {
     const [loading, setLoading] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [deleteAchievementId, setDeleteAchievementId] = useState("");
+    const [imageModal, setImageModal] = useState(null);
+    const [imageLoader, setImageLoader] = useState(false);
+    const { isOpen: isImageModalOpen, onOpen: openImageModal, onClose: closeImageModal } = useDisclosure();
 
     const fetchAchievement = async () => {
         try {
@@ -41,7 +45,7 @@ const Achievement = () => {
             });
             const data = response.data.result;
             if (data.achievement) {
-                setAllAchievement(data.achievement);
+                setAllAchievement(data.achievement.reverse());
             }
             setLoadCompleted(true);
         } catch (error) {
@@ -94,7 +98,7 @@ const Achievement = () => {
                 setAllAchievement(newAchievement);
             }, 1000)
         } catch (error) {
-            setLoading(false)
+            setLoading(false);
             toast({
                 position: 'top',
                 title: error.response.data.msg,
@@ -121,6 +125,12 @@ const Achievement = () => {
     const openDeleteAlert = (achievementId) => {
         onOpen();
         setDeleteAchievementId(achievementId)
+    }
+
+    const viewImage = (image) => {
+        setImageModal(image);
+        setImageLoader(true);
+        openImageModal();
     }
 
     useEffect(() => {
@@ -159,6 +169,14 @@ const Achievement = () => {
                     loadingText: "Deleting"
                 }} />
 
+                <ImageModal props={{
+                    isOpen: isImageModalOpen,
+                    onClose: closeImageModal,
+                    image: imageModal,
+                    imageLoader,
+                    setImageLoader
+                }} />
+
                 <Container maxW='xl' pb={20}>
                     <Box>
                         <PreviousLocation props={{ location: locationRef.current.previousLocation }} />
@@ -195,7 +213,7 @@ const Achievement = () => {
                     }
 
                     {allAchievement.length !== 0 ? <>
-                        <Accordion defaultIndex={[0]} allowMultiple mt={4}>
+                        <Accordion allowMultiple mt={4}>
                             {allAchievement.map((achievement, index) => (
                                 <AccordionItem mb={2} border='1px solid #E2E8F0' borderRadius='5px' key={index}>
                                     <h2>
@@ -235,7 +253,7 @@ const Achievement = () => {
                                                 </Box>
                                                 <Box>
                                                     <Box className='body-label'>Certificate photo</Box>
-                                                    <Flex justifyContent='center' h='200px' border='2px dashed #5b00ff'>
+                                                    <Flex cursor='pointer' justifyContent='center' h='200px' border='2px dashed #5b00ff' onClick={() => viewImage(achievement.certificate)}>
                                                         <Image src={achievement.certificate} h='100%' />
                                                     </Flex>
                                                 </Box>

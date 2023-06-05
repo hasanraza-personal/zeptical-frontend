@@ -1,4 +1,4 @@
-import { Box, Divider, Flex, Icon, Stack, useMediaQuery } from '@chakra-ui/react';
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Divider, Flex, Icon, Stack, useMediaQuery } from '@chakra-ui/react';
 import React from 'react'
 import { JournalText, Pencil, PlusLg } from 'react-bootstrap-icons';
 import { useSelector } from 'react-redux';
@@ -9,41 +9,6 @@ const ViewEducation = ({ userData, ownerUsername }) => {
     const [mobileScreen] = useMediaQuery('(max-width: 850px)');
     const previousLocation = 'Profile';
     const user = useSelector((state) => state.user.value);
-
-    const userEducation = [
-        {
-            available: userData.sscBoard ? true : false,
-            heading: "SSC details",
-            title1: "Board",
-            value1: userData.sscBoard,
-            title2: "School name",
-            value2: userData.sscSchoolName,
-        },
-        {
-            available: userData.hscBoard ? true : false,
-            heading: "HSC details",
-            title1: "Board",
-            value1: userData.hscBoard,
-            title2: "College name",
-            value2: userData.hscCollegeName,
-        },
-        {
-            available: userData.diplomaStream ? true : false,
-            heading: "Diploma details",
-            title1: "Stream",
-            value1: userData.diplomaStream,
-            title2: "College name",
-            value2: userData.diplomaCollegeName,
-        },
-        {
-            available: userData.degreeStream ? true : false,
-            heading: "Degree details",
-            title1: "Steam",
-            value1: userData.degreeStream,
-            title2: "College name",
-            value2: userData.degreeCollegeName,
-        }
-    ]
 
     return (
         <>
@@ -70,32 +35,139 @@ const ViewEducation = ({ userData, ownerUsername }) => {
 
                 {userData ? <>
                     <Box>
-                        {userEducation.map((education, index) => (
-                            <Box key={index}>
-                                {education.available &&
-                                    <Box boxShadow='xs' borderRadius={8} p='14px 12px' mt={3} key={index}>
-                                        <Box fontFamily='var(--semiBold-font)'>{education.heading}</Box>
-                                        <Stack gap={0.5} mt={2}>
+                        {userData.ssc.schoolName &&
+                            <Box boxShadow='xs' borderRadius={8} p='14px 12px' mt={3}>
+                                <Box fontFamily='var(--semibold-font)'>Current qualification</Box>
+                                <Box>{userData.qualification}</Box>
+                            </Box>
+                        }
+
+                        {userData.ssc.schoolName &&
+                            <Accordion allowMultiple mt={3}>
+                                <AccordionItem mb={2} border='1px solid #E2E8F0' borderRadius='5px'>
+                                    <h2>
+                                        <AccordionButton>
+                                            <Flex justifyContent='space-between' w='100%'>
+                                                <Box className='accordian_title'>SSC details</Box>
+                                                <AccordionIcon />
+                                            </Flex>
+                                        </AccordionButton>
+                                    </h2>
+                                    <AccordionPanel>
+                                        <Stack gap={0.5} mt={0}>
                                             <Box>
-                                                <Box>{education.title1}</Box>
-                                                <Box>{education.value1}</Box>
+                                                <Box>School name</Box>
+                                                <Box>{userData.ssc.schoolName}</Box>
                                             </Box>
                                             <Box>
-                                                <Box>{education.title2}</Box>
-                                                <Box>{education.value2}</Box>
+                                                <Box>Percentage</Box>
+                                                <Box>{userData.ssc.marks ? `${userData.ssc.marks}%` : "Not provided"}</Box>
                                             </Box>
                                         </Stack>
-                                    </Box>
-                                }
-                            </Box>
-                        ))}
+                                    </AccordionPanel>
+                                </AccordionItem>
+                            </Accordion>
+                        }
+
+                        {userData.hsc.stream &&
+                            <Accordion allowMultiple mt={3}>
+                                <AccordionItem mb={2} border='1px solid #E2E8F0' borderRadius='5px'>
+                                    <h2>
+                                        <AccordionButton>
+                                            <Flex justifyContent='space-between' w='100%'>
+                                                <Box className='accordian_title'>HSC details</Box>
+                                                <AccordionIcon />
+                                            </Flex>
+                                        </AccordionButton>
+                                    </h2>
+                                    <AccordionPanel>
+                                        <Stack gap={0.5} mt={0}>
+                                            <Box>
+                                                <Box>Stream</Box>
+                                                <Box>{userData.hsc.stream}</Box>
+                                            </Box>
+                                            <Box>
+                                                <Box>College name</Box>
+                                                <Box>{userData.hsc.collegeName}</Box>
+                                            </Box>
+                                            <Box>
+                                                <Box>Percentage</Box>
+                                                <Box>{userData.hsc.marks ? `${userData.hsc.marks}%` : "Not provided"}</Box>
+                                            </Box>
+                                        </Stack>
+                                    </AccordionPanel>
+                                </AccordionItem>
+                            </Accordion>
+                        }
+
+                        {userData.diploma.stream &&
+                            <Accordion allowMultiple mt={3}>
+                                <AccordionItem mb={2} border='1px solid #E2E8F0' borderRadius='5px'>
+                                    <h2>
+                                        <AccordionButton>
+                                            <Flex justifyContent='space-between' w='100%'>
+                                                <Box className='accordian_title'>Diploma details</Box>
+                                                <AccordionIcon />
+                                            </Flex>
+                                        </AccordionButton>
+                                    </h2>
+                                    <AccordionPanel>
+                                        <Stack gap={0.5} mt={2}>
+                                            <Box>
+                                                <Box>Stream</Box>
+                                                <Box>{userData.diploma.stream}</Box>
+                                            </Box>
+                                            <Box>
+                                                <Box>College name</Box>
+                                                <Box>{userData.diploma.collegeName}</Box>
+                                            </Box>
+                                            <Box>
+                                                <Box>Percentage</Box>
+                                                <Box>{userData.diploma.marks ? `${userData.diploma.marks}%` : "Not provided"}</Box>
+                                            </Box>
+                                        </Stack>
+                                    </AccordionPanel>
+                                </AccordionItem>
+                            </Accordion>
+                        }
+
+                        {userData.degree.stream &&
+                            <Accordion allowMultiple mt={3}>
+                                <AccordionItem mb={2} border='1px solid #E2E8F0' borderRadius='5px'>
+                                    <h2>
+                                        <AccordionButton>
+                                            <Flex justifyContent='space-between' w='100%'>
+                                                <Box className='accordian_title'>Diploma details</Box>
+                                                <AccordionIcon />
+                                            </Flex>
+                                        </AccordionButton>
+                                    </h2>
+                                    <AccordionPanel>
+                                        <Stack gap={0.5} mt={2}>
+                                            <Box>
+                                                <Box>Stream</Box>
+                                                <Box>{userData.degree.stream}</Box>
+                                            </Box>
+                                            <Box>
+                                                <Box>College name</Box>
+                                                <Box>{userData.degree.collegeName}</Box>
+                                            </Box>
+                                            <Box>
+                                                <Box>Percentage</Box>
+                                                <Box>{userData.degree.marks ? `${userData.degree.marks} CGPA` : "Not provided"}</Box>
+                                            </Box>
+                                        </Stack>
+                                    </AccordionPanel>
+                                </AccordionItem>
+                            </Accordion>
+                        }
                     </Box>
                 </> : <>
                     <Box textAlign='center' py={4}>
                         No education information available
                     </Box>
                 </>}
-            </Box>
+            </Box >
         </>
     )
 }

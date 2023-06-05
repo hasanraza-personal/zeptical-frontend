@@ -11,6 +11,8 @@ import axios from 'axios';
 import NotFoundImage from '../../../../../../../public/images/undraw/not_found.svg';
 import SystemLoader from '../../../../../../../components/loader/systemLoader/SystemLoader';
 import LazyLoad from 'react-lazy-load';
+import { rephraseSentence } from '../../../../../../../api/rephraseSentence';
+import RephraseLoader from '../../../../../../../components/loader/rephraseLoader/RephraseLoader';
 
 const EditAchievement = () => {
     const [mobileScreen] = useMediaQuery('(max-width: 850px)');
@@ -25,6 +27,7 @@ const EditAchievement = () => {
     const [imageUploader, setImageUploader] = useState(false);
     const [loadCompleted, setLoadCompleted] = useState(false);
     const { isOpen: isImageUploader, onOpen: openImageUploader, onClose: closeImageUploader } = useDisclosure();
+    const { isOpen: isRephraseLoader, onOpen: openRephraseLoader, onClose: closeRephraseLoader } = useDisclosure();
     const [credentials, setCredentials] = useState({
         achievementId: "",
         name: "",
@@ -146,7 +149,10 @@ const EditAchievement = () => {
                 closeImageUploader();
             }, isImage ? 5000 : 1000)
         } catch (error) {
-            setLoading(false)
+            setPhotoSelected(false);
+            setImageUploader(false);
+            closeImageUploader();
+            setLoading(false);
             toast({
                 position: 'top',
                 title: error.response.data.msg,
@@ -200,6 +206,29 @@ const EditAchievement = () => {
         }
     }
 
+    const handleRephrase = async () => {
+        if (credentials.description.length < 3) {
+            toast({
+                position: 'top',
+                title: "In order to rephrase the above sentence, your description must include atleast 200 characters.",
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+            });
+            return
+        }
+        setLoading(true)
+        openRephraseLoader();
+
+        const rephrasedSentence = await rephraseSentence(credentials.description);
+
+        setTimeout(() => {
+            setCredentials({ ...credentials, 'description': rephrasedSentence.data });
+            closeRephraseLoader();
+            setLoading(false);
+        }, 5000)
+    }
+
     useEffect(() => {
         if (location.state) {
             locationRef.current = location.state;
@@ -235,6 +264,12 @@ const EditAchievement = () => {
                     imageUploader
                 }} />
 
+                <RephraseLoader props={{
+                    isOpen: isRephraseLoader,
+                    onOpen: openRephraseLoader,
+                    onClose: closeRephraseLoader,
+                }} />
+
                 <Container maxW='xl' p={0} pb={20}>
                     <Box className='back-navigation-container' onClick={() => navigate(-1)} fontSize={mobileScreen ? '18px' : '22px'}>
                         <Icon as={ArrowLeft} />
@@ -247,7 +282,7 @@ const EditAchievement = () => {
                             <VStack gap={0.5} mt={4}>
                                 <TextInput props={{
                                     isRequired: true,
-                                    label: "Comprtition name",
+                                    label: "Competition name",
                                     placeholder: "Hackaton",
                                     name: "name",
                                     value: credentials.name,
@@ -274,6 +309,17 @@ const EditAchievement = () => {
                                     value: credentials.description,
                                     onChange: onChange
                                 }} />
+                                <Flex justifyContent='end' w='100%'>
+                                    <Button
+                                        className='zeptical-original-fill-button'
+                                        size='sm'
+                                        onClick={handleRephrase}
+                                        isLoading={loading}
+                                        loadingText="Rephrasing"
+                                    >
+                                        Rephrase it!
+                                    </Button>
+                                </Flex>
 
                                 <ProductPhotoInput props={{
                                     isRequired: true,

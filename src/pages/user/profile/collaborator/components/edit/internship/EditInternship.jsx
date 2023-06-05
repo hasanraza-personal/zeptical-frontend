@@ -1,4 +1,4 @@
-import { Box, Button, Container, Flex, Icon, Image, VStack, useDisclosure, useMediaQuery, useToast } from '@chakra-ui/react';
+import { Box, Button, Container, Flex, Icon, Image, Stack, useDisclosure, useMediaQuery, useToast } from '@chakra-ui/react';
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react'
 import LazyLoad from 'react-lazy-load';
@@ -9,9 +9,11 @@ import ImageUploadLoader from '../../../../../../../components/loader/imageUploa
 import TextInput from '../../../../../../../components/inputFields/textInput/TextInput';
 import SelectInput from '../../../../../../../components/inputFields/selectInput/SelectInput';
 import TextAreaInput from '../../../../../../../components/inputFields/textAreaInput/TextAreaInput';
-import MoneyInput from '../../../../../../../components/inputFields/moneyInput/MoneyInput';
 import ProductPhotoInput from '../../../../../../../components/inputFields/productPhotoInput/ProductPhotoInput';
-import { ArrowLeft } from 'react-bootstrap-icons';
+import { ArrowLeft, CurrencyRupee } from 'react-bootstrap-icons';
+import { rephraseSentence } from '../../../../../../../api/rephraseSentence';
+import RephraseLoader from '../../../../../../../components/loader/rephraseLoader/RephraseLoader';
+import LeftIconNumberInput from '../../../../../../../components/iconInputFields/leftIconNumberInput/LeftIconNumberInput';
 
 const EditInternship = () => {
     const [mobileScreen] = useMediaQuery('(max-width: 850px)');
@@ -26,15 +28,17 @@ const EditInternship = () => {
     const locationRef = useRef("");
     const [imageUploader, setImageUploader] = useState(false);
     const { isOpen: isImageUploader, onOpen: openImageUploader, onClose: closeImageUploader } = useDisclosure();
+    const { isOpen: isRephraseLoader, onOpen: openRephraseLoader, onClose: closeRephraseLoader } = useDisclosure();
     const [credentials, setCredentials] = useState({
         internshipId: "",
         companyName: "",
         duration: "",
+        type: "",
         stipends: "",
         description: "",
         certificate: ""
     });
-    const options = [
+    const internshipPeriodOptions = [
         {
             label: "1 Month - 3 Months",
             value: "1 Month - 3 Months"
@@ -50,8 +54,18 @@ const EditInternship = () => {
         {
             label: "1 Year - 2 Years",
             value: "1 Year - 2 Years"
+        }
+    ];
+    const internshipTypeOptions = [
+        {
+            label: "Paid",
+            value: "paid"
         },
-    ]
+        {
+            label: "Unpaid",
+            value: "unpaid"
+        }
+    ];
 
 
     const onChange = (e) => {
@@ -83,7 +97,18 @@ const EditInternship = () => {
             return
         }
 
-        if (credentials.stipends.trim().length === 0) {
+        if (credentials.type.trim().length === 0) {
+            toast({
+                position: 'top',
+                title: "Please select your internship type",
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+            });
+            return
+        }
+
+        if (credentials.type === "paid" && credentials.stipends.trim().length === 0) {
             toast({
                 position: 'top',
                 title: "Please provide the amount of stipend you received during your internship",
@@ -129,7 +154,8 @@ const EditInternship = () => {
         formData.append('internshipId', credentials.internshipId);
         formData.append('companyName', credentials.companyName);
         formData.append('duration', credentials.duration);
-        formData.append('stipends', credentials.stipends);
+        formData.append('type', credentials.type);
+        formData.append('stipends', credentials.type === "paid" ? credentials.stipends : "");
         formData.append('description', credentials.description);
         formData.append('certificate', credentials.certificate);
 
@@ -157,7 +183,10 @@ const EditInternship = () => {
                 closeImageUploader();
             }, isImage ? 5000 : 1000)
         } catch (error) {
-            setLoading(false)
+            setPhotoSelected(false);
+            setImageUploader(false);
+            closeImageUploader();
+            setLoading(false);
             toast({
                 position: 'top',
                 title: error.response.data.msg,
@@ -184,6 +213,7 @@ const EditInternship = () => {
                     internshipId: data._id,
                     companyName: data.companyName,
                     duration: data.duration,
+                    type: data.type,
                     stipends: data.stipends,
                     description: data.description,
                     certificate: data.certificate
@@ -212,12 +242,35 @@ const EditInternship = () => {
         }
     }
 
+    const handleRephrase = async () => {
+        if (credentials.description.length < 3) {
+            toast({
+                position: 'top',
+                title: "In order to rephrase the above sentence, your description must include atleast 200 characters.",
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+            });
+            return
+        }
+        setLoading(true)
+        openRephraseLoader();
+
+        const rephrasedSentence = await rephraseSentence(credentials.description);
+
+        setTimeout(() => {
+            setCredentials({ ...credentials, 'description': rephrasedSentence.data });
+            closeRephraseLoader();
+            setLoading(false);
+        }, 5000)
+    }
+
     useEffect(() => {
         if (location.state) {
             locationRef.current = location.state;
             if (locationRef.current.internshipId) {
                 fetchInternship();
-            }else{
+            } else {
                 setLoadCompleted(true);
             }
         }
@@ -247,6 +300,12 @@ const EditInternship = () => {
                     imageUploader
                 }} />
 
+                <RephraseLoader props={{
+                    isOpen: isRephraseLoader,
+                    onOpen: openRephraseLoader,
+                    onClose: closeRephraseLoader,
+                }} />
+
                 <Container maxW='xl' p={0} pb={20}>
                     <Box className='back-navigation-container' onClick={() => navigate(-1)} fontSize={mobileScreen ? '18px' : '22px'}>
                         <Icon as={ArrowLeft} />
@@ -256,7 +315,7 @@ const EditInternship = () => {
                     <Box mt={4} px={4} py={!mobileScreen && 4} boxShadow={!mobileScreen && 'xs'}>
                         <form onSubmit={handleSubmit}>
 
-                            <VStack gap={0.5} mt={4}>
+                            <Stack gap={0.5} mt={4}>
                                 <TextInput props={{
                                     isRequired: true,
                                     label: "Company name",
@@ -274,18 +333,38 @@ const EditInternship = () => {
                                         name: "duration",
                                         value: credentials.duration,
                                         onChange: onChange,
-                                        options: options
+                                        options: internshipPeriodOptions
                                     }}
                                 />
 
-                                <MoneyInput props={{
-                                    isRequired: true,
-                                    label: "Internship stipends",
-                                    placeholder: "5000",
-                                    name: "stipends",
-                                    value: !credentials.stipends ? "" : parseInt(credentials.stipends),
-                                    onChange: onChange
-                                }} />
+                                <SelectInput
+                                    props={{
+                                        isRequired: true,
+                                        label: "Internship type",
+                                        placeholder: "Select Internship Type",
+                                        name: "type",
+                                        value: credentials.type,
+                                        onChange: onChange,
+                                        options: internshipTypeOptions
+                                    }}
+                                />
+
+                                {credentials.type === "paid" &&
+                                    <Box>
+                                        <LeftIconNumberInput props={{
+                                            isRequired: true,
+                                            label: "Internship stipends",
+                                            icon: CurrencyRupee,
+                                            placeholder: "5000",
+                                            name: "stipends",
+                                            value: credentials.stipends,
+                                            onChange: onChange
+                                        }} />
+                                        <Box color='var(--dark-grey-color)' fontSize={14}>
+                                            Provide your monthly stipend. Write 0, if it was not paid Internship.
+                                        </Box>
+                                    </Box>
+                                }
 
                                 <TextAreaInput props={{
                                     isRequired: true,
@@ -295,6 +374,18 @@ const EditInternship = () => {
                                     value: credentials.description,
                                     onChange: onChange
                                 }} />
+
+                                <Flex justifyContent='end' w='100%'>
+                                    <Button
+                                        className='zeptical-original-fill-button'
+                                        size='sm'
+                                        onClick={handleRephrase}
+                                        isLoading={loading}
+                                        loadingText="Rephrasing"
+                                    >
+                                        Rephrase it!
+                                    </Button>
+                                </Flex>
 
                                 <ProductPhotoInput props={{
                                     label: "Internship certificate",
@@ -306,7 +397,7 @@ const EditInternship = () => {
                                     setPhoto: setPhoto,
                                     setPhotoSelected: setPhotoSelected
                                 }} />
-                            </VStack>
+                            </Stack>
 
                             {photoSelected && !loading &&
                                 <Button mt={2} w='100%' size='sm' onClick={handleRemove}>Remove Selected Photo</Button>

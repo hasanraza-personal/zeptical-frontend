@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect, useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import Header from './components/header/Header';
 import SystemLoader from './components/loader/systemLoader/SystemLoader';
 import BottomMobileNavbar from './components/bottomMobileNavbar/BottomMobileNavbar';
@@ -27,6 +27,7 @@ const CollaboratorAchievement = React.lazy(() => import('./pages/user/profile/co
 const EditCollaboratorAchievement = React.lazy(() => import('./pages/user/profile/collaborator/components/edit/achievement/EditAchievement'));
 const CollaboratorInternship = React.lazy(() => import('./pages/user/profile/collaborator/components/view/internship/Internship'));
 const EditCollaboratorInternship = React.lazy(() => import('./pages/user/profile/collaborator/components/edit/internship/EditInternship'));
+const CreateCollaborator = React.lazy(() => import('./pages/user/profile/collaborator/createCollaborator/CreateCollaborator'));
 
 function App() {
 	const [mobileScreen] = useMediaQuery('(max-width: 850px)');
@@ -34,6 +35,24 @@ function App() {
 	const dispatch = useDispatch();
 	const toast = useToast();
 	const [isUser, setIsUser] = useState(null);
+	const location = useLocation();
+	// const [locationExist, setLocationExist] = useState(false);
+	let locationArr = [
+		"/user/createcollaborator"
+	];
+
+	const locationPathName = location.pathname;
+	const locationFound = locationArr.includes(locationPathName);
+
+	if (locationFound) {
+		// setLocationExist(true);
+		// const pathElements = locationPathName.split('/');
+		// const lastElement = pathElements[pathElements.length - 1];
+	}
+
+
+
+
 
 	const fetchUser = async () => {
 		try {
@@ -88,9 +107,11 @@ function App() {
 				gap={!mobileScreen && '20px'}
 				padding={!mobileScreen ? '2vh 0' : 0}
 			>
-				{!mobileScreen && isUser &&
-					<Sidebar />
-				}
+				{!locationFound && <>
+					{!mobileScreen && isUser &&
+						<Sidebar />
+					}
+				</>}
 
 				<Suspense fallback={<SystemLoader />}>
 					<Routes>
@@ -113,6 +134,7 @@ function App() {
 								<Route path=':username' element={<UserProfile />} />
 								<Route path='editprofile' element={<EditUserProfile />} />
 								<Route path='editcollaborator' element={<EditCollaborator />} />
+								<Route path='createcollaborator' element={<CreateCollaborator />} />
 								<Route path=':username/project' element={<CollaboratorProject />} />
 								<Route path=':username/editproject' element={<EditCollaboratorProject />} />
 								<Route path=':username/achievement' element={<CollaboratorAchievement />} />
@@ -130,9 +152,11 @@ function App() {
 					</Routes>
 				</Suspense>
 
-				{!mobileScreen && isUser &&
-					<RightSidebar />
-				}
+				{!locationFound && <>
+					{!mobileScreen && isUser &&
+						<RightSidebar />
+					}
+				</>}
 			</Container>
 
 			{mobileScreen && isUser &&

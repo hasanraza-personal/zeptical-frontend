@@ -48,6 +48,7 @@ const SuggestionInput = ({ props }) => {
                             onChange={onChange}
                             value={props.value}
                             autoComplete='off'
+                            className='input-focus'
                         />
 
                         {showSuggestion &&

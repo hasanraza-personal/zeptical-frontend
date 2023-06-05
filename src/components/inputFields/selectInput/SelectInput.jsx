@@ -2,7 +2,6 @@ import { FormControl, FormLabel, Select } from '@chakra-ui/react'
 import React from 'react'
 
 const SelectInput = ({ props }) => {
-
     return (
         <>
             <FormControl isRequired={props.isRequired}>

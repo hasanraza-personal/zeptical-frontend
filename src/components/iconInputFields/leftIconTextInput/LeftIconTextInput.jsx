@@ -1,13 +1,15 @@
-import { FormControl, FormLabel, Input, InputGroup, InputLeftAddon } from '@chakra-ui/react'
-import React from 'react'
+import { FormControl, FormLabel, Icon, Input, InputGroup, InputLeftAddon, InputRightAddon } from '@chakra-ui/react';
+import React from 'react';
 
-const LinkInput = ({ props }) => {
+const LeftIconTextInput = ({ props }) => {
     return (
         <>
             <FormControl isRequired={props.isRequired}>
                 <FormLabel mb={0}>{props.label}</FormLabel>
                 <InputGroup>
-                    <InputLeftAddon children='https://' />
+                    <InputLeftAddon children={
+                        <Icon as={props.icon} color='gray.600' />
+                    } />
                     <Input
                         type='text'
                         name={props.name}
@@ -22,4 +24,4 @@ const LinkInput = ({ props }) => {
     )
 }
 
-export default LinkInput
+export default LeftIconTextInput

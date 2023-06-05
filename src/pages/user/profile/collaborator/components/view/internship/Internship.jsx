@@ -10,6 +10,7 @@ import SystemLoader from '../../../../../../../components/loader/systemLoader/Sy
 import Alert from '../../../../../../../components/alert/Alert';
 import PreviousLocation from '../../../../../../../components/previousLocation/PreviousLocation';
 import { Pencil, PlusLg, Trash } from 'react-bootstrap-icons';
+import ImageModal from '../../../../../../../components/modal/imageModal/ImageModal';
 
 const Internship = () => {
     /* cannot use ownerCredentials.username (ownerUsername when passed as props) 
@@ -28,7 +29,10 @@ const Internship = () => {
     const locationRef = useRef("");
     const [loading, setLoading] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const { isOpen: isImageModalOpen, onOpen: openImageModal, onClose: closeImageModal } = useDisclosure();
     const [deleteInternshipId, setDeleteInternshipId] = useState("");
+    const [imageModal, setImageModal] = useState(null);
+    const [imageLoader, setImageLoader] = useState(false);
 
     const fetchInternship = async () => {
         try {
@@ -41,7 +45,7 @@ const Internship = () => {
             });
             const data = response.data.result;
             if (data.internship) {
-                setAllInternship(data.internship);
+                setAllInternship(data.internship.reverse());
             }
             setLoadCompleted(true);
         } catch (error) {
@@ -123,6 +127,12 @@ const Internship = () => {
         setDeleteInternshipId(internshipId)
     }
 
+    const viewImage = (image) => {
+        setImageModal(image);
+        setImageLoader(true);
+        openImageModal();
+    }
+
     useEffect(() => {
         if (location.state) {
             locationRef.current = location.state;
@@ -157,6 +167,14 @@ const Internship = () => {
                     rightBtnFn: handleDelete,
                     loading,
                     loadingText: "Deleting"
+                }} />
+
+                <ImageModal props={{
+                    isOpen: isImageModalOpen,
+                    onClose: closeImageModal,
+                    image: imageModal,
+                    imageLoader,
+                    setImageLoader
                 }} />
 
                 <Container maxW='xl' pb={20}>
@@ -195,7 +213,7 @@ const Internship = () => {
                     }
 
                     {allInternship.length !== 0 ? <>
-                        <Accordion defaultIndex={[0]} allowMultiple mt={4}>
+                        <Accordion allowMultiple mt={4}>
                             {allInternship.map((internship, index) => (
                                 <AccordionItem mb={2} border='1px solid #E2E8F0' borderRadius='5px' key={index}>
                                     <h2>
@@ -231,9 +249,16 @@ const Internship = () => {
                                                 </Box>
 
                                                 <Box>
-                                                    <Box>Internship stipends</Box>
-                                                    <Box>{internship.stipends}</Box>
+                                                    <Box>Internship type</Box>
+                                                    <Box>{internship.type.replace(/^\w/, (c) => c.toUpperCase())}</Box>
                                                 </Box>
+
+                                                {internship.type === 'paid' &&
+                                                    <Box>
+                                                        <Box>Internship stipends</Box>
+                                                        <Box>{new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumSignificantDigits: 6 }).format(internship.stipends)}</Box>
+                                                    </Box>
+                                                }
 
                                                 <Box>
                                                     <Box>Internship description</Box>
@@ -242,7 +267,7 @@ const Internship = () => {
 
                                                 <Box>
                                                     <Box className='body-label'>Internship certificate</Box>
-                                                    <Flex justifyContent='center' h='200px' border='2px dashed #5b00ff'>
+                                                    <Flex cursor='pointer' justifyContent='center' h='200px' border='2px dashed #5b00ff' onClick={() => viewImage(internship.certificate)}>
                                                         <Image src={internship.certificate} h='100%' />
                                                     </Flex>
                                                 </Box>

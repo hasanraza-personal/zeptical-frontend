@@ -11,6 +11,7 @@ import PreviousLocation from '../../../../../../../components/previousLocation/P
 import { v4 as uuidv4 } from 'uuid';
 import { ExternalLinkIcon } from '@chakra-ui/icons'
 import Alert from '../../../../../../../components/alert/Alert';
+import ImageModal from '../../../../../../../components/modal/imageModal/ImageModal';
 
 const Project = () => {
     /* cannot use ownerCredentials.username (ownerUsername when passed as props) 
@@ -30,6 +31,10 @@ const Project = () => {
     const [loading, setLoading] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [deleteProjectId, setDeleteProjectId] = useState("");
+    const [imageModal, setImageModal] = useState(null);
+    const [imageLoader, setImageLoader] = useState(false);
+    const { isOpen: isImageModalOpen, onOpen: openImageModal, onClose: closeImageModal } = useDisclosure();
+
 
     const fetchProject = async () => {
         try {
@@ -42,7 +47,7 @@ const Project = () => {
             });
             const data = response.data.result;
             if (data.project) {
-                setAllProject(data.project);
+                setAllProject(data.project.reverse());
             }
             setLoadCompleted(true);
         } catch (error) {
@@ -95,7 +100,7 @@ const Project = () => {
                 setAllProject(newProject);
             }, 1000)
         } catch (error) {
-            setLoading(false)
+            setLoading(false);
             toast({
                 position: 'top',
                 title: error.response.data.msg,
@@ -122,6 +127,12 @@ const Project = () => {
     const openDeleteAlert = (projectId) => {
         onOpen();
         setDeleteProjectId(projectId)
+    }
+
+    const viewImage = (image) => {
+        setImageModal(image);
+        setImageLoader(true);
+        openImageModal();
     }
 
     useEffect(() => {
@@ -160,6 +171,14 @@ const Project = () => {
                     loadingText: "Deleting"
                 }} />
 
+                <ImageModal props={{
+                    isOpen: isImageModalOpen,
+                    onClose: closeImageModal,
+                    image: imageModal,
+                    imageLoader,
+                    setImageLoader
+                }} />
+
                 <Container maxW='xl' pb={20}>
                     <Box>
                         <PreviousLocation props={{ location: locationRef.current.previousLocation }} />
@@ -196,7 +215,7 @@ const Project = () => {
                     }
 
                     {allProject.length !== 0 ? <>
-                        <Accordion defaultIndex={[0]} allowMultiple mt={4}>
+                        <Accordion allowMultiple mt={4}>
                             {allProject.map((project, index) => (
                                 <AccordionItem mb={2} border='1px solid #E2E8F0' borderRadius='5px' key={index}>
                                     <h2>
@@ -234,8 +253,8 @@ const Project = () => {
                                                     <Box>Project Link</Box>
                                                     {
                                                         project.projectLink ? <>
-                                                            <ChakraLink href={`https://${project.projectLink}`} isExternal>
-                                                                https://{project.projectLink} <ExternalLinkIcon mx='2px' />
+                                                            <ChakraLink href={project.projectLink} isExternal>
+                                                                {project.projectLink} <ExternalLinkIcon mx='2px' />
                                                             </ChakraLink>
                                                         </> : <>
                                                             <Box>{"Not provided"}</Box>
@@ -247,8 +266,8 @@ const Project = () => {
                                                     <Box>Github Link</Box>
                                                     {
                                                         project.githubLink ? <>
-                                                            <ChakraLink href={`https://${project.githubLink}`} isExternal>
-                                                                https://{project.githubLink} <ExternalLinkIcon mx='2px' />
+                                                            <ChakraLink href={project.githubLink} isExternal>
+                                                                {project.githubLink} <ExternalLinkIcon mx='2px' />
                                                             </ChakraLink>
                                                         </> : <>
                                                             <Box>{"Not provided"}</Box>
@@ -257,7 +276,7 @@ const Project = () => {
                                                 </Box>
                                                 <Box>
                                                     <Box className='body-label'>Project photo</Box>
-                                                    <Flex justifyContent='center' h='200px' border='2px dashed #5b00ff'>
+                                                    <Flex cursor='pointer' justifyContent='center' h='200px' border='2px dashed #5b00ff' onClick={() => viewImage(project.photo)}>
                                                         <Image src={project.photo} h='100%' />
                                                     </Flex>
                                                 </Box>

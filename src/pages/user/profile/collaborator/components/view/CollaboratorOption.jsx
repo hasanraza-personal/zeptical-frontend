@@ -4,6 +4,7 @@ import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPane
 import CollaboratorInformation from './CollaboratorInformation';
 import notFoundImage from '../../../../../../public/images/undraw/not_found.svg';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 
 const CollaboratorOption = ({ ownerUsername }) => {
@@ -42,7 +43,7 @@ const CollaboratorOption = ({ ownerUsername }) => {
                                     {/* <Image src={collaboratorImage} w={200} /> */}
                                     <Image src={notFoundImage} w={mobileScreen ? 150 : 180} />
                                 </Flex>
-                                <Button className='zeptical-red-empty-button' size='sm' w='100%'>
+                                <Button as={Link} to='/user/createcollaborator' className='zeptical-red-empty-button' size='sm' w='100%'>
                                     Apply For Collaborator
                                 </Button>
                             </Box>

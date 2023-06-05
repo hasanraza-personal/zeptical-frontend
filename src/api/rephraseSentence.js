@@ -1,18 +1,18 @@
 import axios from "axios";
 
-export const getInformation = async (topic) => {
-    // Get information about the topic
+export const rephraseSentence = async (sentence) => {
+    // Rephrase the sentence
     try {
         const response = await axios({
             method: 'POST',
-            url: '/api/extras/getinformation',
+            url: '/api/extras/rephrasesentence',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             },
-            data: { topicName: topic }
+            data: { sentence }
         });
-        return { data: response.data.result, source: response.data.source }
+        return { data: response.data.result }
     } catch (error) {
         return { data: error.response.data.msg }
     }
