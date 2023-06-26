@@ -11,8 +11,8 @@ import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import SystemLoader from '../../../../components/loader/systemLoader/SystemLoader';
 import UserProfileInformation from './components/view/UserProfileInformation';
-import CollaboratorOption from './components/view/CollaboratorOption';
-
+import CollaboratorOption from './components/view/collaboratorOption/CollaboratorOption';
+import ViewPaymentPreference from './components/view/ViewPaymentPreference';
 
 const Collaborator = ({ ownerUsername }) => {
     // eslint-disable-next-line 
@@ -23,6 +23,7 @@ const Collaborator = ({ ownerUsername }) => {
     const location = useLocation();
     const username = location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
     const [loadCompleted, setLoadCompleted] = useState(false);
+    const [collaboratorApplied, setCollaboratorApplied] = useState();
 
     const fetchUser = async () => {
         try {
@@ -35,9 +36,7 @@ const Collaborator = ({ ownerUsername }) => {
                 },
             });
             setUserData(response.data.user);
-
             setLoadCompleted(true);
-
         } catch (error) {
             toast({
                 position: 'top',
@@ -54,6 +53,12 @@ const Collaborator = ({ ownerUsername }) => {
         // eslint-disable-next-line
     }, [username])
 
+    useEffect(() => {
+        if (userData.collaborator) {
+            setCollaboratorApplied(userData.collaborator.isApplied);
+        }
+    }, [userData])
+
     if (loadCompleted) {
         return (
             <>
@@ -61,7 +66,16 @@ const Collaborator = ({ ownerUsername }) => {
                     <UserProfileInformation />
                 }
 
-                <CollaboratorOption ownerUsername={ownerUsername} />
+                <CollaboratorOption props={{
+                    userData: userData.collaborator,
+                    ownerUsername,
+                    collaboratorApplied,
+                    setCollaboratorApplied
+                }} />
+
+                {collaboratorApplied &&
+                    <ViewPaymentPreference userData={userData.collaborator} ownerUsername={ownerUsername} />
+                }
 
                 <ViewLocation userData={userData.location} ownerUsername={ownerUsername} />
 

@@ -36,23 +36,12 @@ function App() {
 	const toast = useToast();
 	const [isUser, setIsUser] = useState(null);
 	const location = useLocation();
-	// const [locationExist, setLocationExist] = useState(false);
 	let locationArr = [
 		"/user/createcollaborator"
 	];
 
 	const locationPathName = location.pathname;
 	const locationFound = locationArr.includes(locationPathName);
-
-	if (locationFound) {
-		// setLocationExist(true);
-		// const pathElements = locationPathName.split('/');
-		// const lastElement = pathElements[pathElements.length - 1];
-	}
-
-
-
-
 
 	const fetchUser = async () => {
 		try {
@@ -159,9 +148,11 @@ function App() {
 				</>}
 			</Container>
 
-			{mobileScreen && isUser &&
-				<BottomMobileNavbar />
-			}
+			{!locationFound && <>
+				{mobileScreen && isUser &&
+					<BottomMobileNavbar />
+				}
+			</>}
 		</>
 	);
 }

@@ -2,8 +2,8 @@ import { Flex, Image } from '@chakra-ui/react';
 import React from 'react'
 import LazyLoad from 'react-lazy-load';
 import { Link } from 'react-router-dom';
-import collaboratorImage from '../../../../../../public/images/collaborator.png';
-import showImage from '../../../../../../public/images/undraw/show.svg';
+import collaboratorImage from '../../../../../../../../public/images/collaborator.png';
+import showImage from '../../../../../../../../public/images/undraw/show.svg';
 
 const CollaboratorInformation = () => {
     const previousLocation = "Profile";

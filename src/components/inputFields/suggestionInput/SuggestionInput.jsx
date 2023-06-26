@@ -1,38 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import styles from './suggestioninput.module.css';
 import { Box, FormControl, FormLabel, Input } from '@chakra-ui/react';
 
 const SuggestionInput = ({ props }) => {
-    const [showSuggestion, setShowSuggestion] = useState(false);
-    const [filteredData, setFilteredData] = useState([]);
+    const filteredDataRef = useRef([]);
+    const [inputValue, setInputValue] = useState(props.value);
 
     const onChange = (e) => {
-        props.setCredentials({ ...props.credentials, [props.name]: e.target.value });
-
-        if (e.target.value.trim().length === 0) {
-            setShowSuggestion(false);
-            return;
-        }
-
-        let filteredData = props.data.filter(item => item.value.toLowerCase().startsWith(e.target.value.trim().toLowerCase()));
-
-        if (filteredData.length !== 0) {
-            setFilteredData(filteredData);
-            setShowSuggestion(true)
-        } else {
-            setFilteredData([]);
-            setShowSuggestion(false)
-        }
+        setInputValue(e.target.value);
+        filteredDataRef.current = props.data.filter(item => item.value.toLowerCase().startsWith(e.target.value.trim().toLowerCase()));
     }
 
     const selectSuggestion = (selectedValue) => {
-        props.setCredentials({ ...props.credentials, [props.name]: selectedValue })
-        setShowSuggestion(false);
+        setInputValue(selectedValue);
+        props.setCredentials({ ...props.credentials, [props.name]: selectedValue });
+        filteredDataRef.current = []
     }
 
-    useEffect(() => {
-        setFilteredData(props.data)
-    }, [])
+    const handleSetValue = () => {
+        setInputValue(inputValue);
+        props.setCredentials({ ...props.credentials, [props.name]: inputValue });
+    }
 
     return (
         <>
@@ -46,18 +34,20 @@ const SuggestionInput = ({ props }) => {
                             placeholder={props.placeholder}
                             name={props.name}
                             onChange={onChange}
-                            value={props.value}
+                            value={inputValue}
                             autoComplete='off'
                             className='input-focus'
+                            onBlur={handleSetValue}
                         />
 
-                        {showSuggestion &&
+                        {(filteredDataRef.current.length !== 0) &&
                             <Box className={styles.custom_suggestion_box}>
-                                {filteredData.map((data, index) => (
+                                {filteredDataRef.current.map((data, index) => (
                                     <Box
                                         key={index}
                                         className={styles.custom_suggestion_element}
                                         onClick={() => selectSuggestion(data.value)}
+                                        tabIndex={0}
                                     >
                                         {data.value}
                                     </Box>

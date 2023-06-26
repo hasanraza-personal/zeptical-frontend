@@ -7,6 +7,7 @@ import PreviousLocation from '../../../../../../components/previousLocation/Prev
 import EditLocation from './components/EditLocation';
 import EditEducation from './components/EditEducation';
 import EditSkill from './components/EditSkill';
+import EditPaymentPreference from './components/EditPaymentPreference';
 
 const EditCollaborator = () => {
     const [mobileScreen] = useMediaQuery('(max-width: 850px)');
@@ -33,6 +34,10 @@ const EditCollaborator = () => {
                 <Box>
                     <PreviousLocation props={{ location: previousLocation }} />
                 </Box>
+
+                {pageType === "paymentPreferenceDetails" &&
+                    <EditPaymentPreference />
+                }
 
                 {pageType === "locationDetails" &&
                     <EditLocation />

@@ -137,7 +137,7 @@ const ViewEducation = ({ userData, ownerUsername }) => {
                                     <h2>
                                         <AccordionButton>
                                             <Flex justifyContent='space-between' w='100%'>
-                                                <Box className='accordian_title'>Diploma details</Box>
+                                                <Box className='accordian_title'>Degree details</Box>
                                                 <AccordionIcon />
                                             </Flex>
                                         </AccordionButton>

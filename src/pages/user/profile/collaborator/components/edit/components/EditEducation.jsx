@@ -1,5 +1,5 @@
 import { Box, Button, Container, Stack, useMediaQuery, useToast } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import axios from 'axios';
 import SystemLoader from '../../../../../../../components/loader/systemLoader/SystemLoader';
 import { useNavigate } from 'react-router-dom';
@@ -15,10 +15,9 @@ const EditEducation = () => {
     const toast = useToast();
     const [loadCompleted, setLoadCompleted] = useState(false);
     const navigate = useNavigate();
-    const [schoolData, setSchoolData] = useState([]);
-    const [collegeData, setCollegeData] = useState([]);
-    const [streamData, setStreamData] = useState([]);
-    const [qualificationSelected, setQualificationSelected] = useState(false);
+    const schoolDataRef = useRef([]);
+    const collegeDataRef = useRef([]);
+    const streamDataRef = useRef([]);
     const [credentials, setCredentials] = useState({
         qualification: "",
         sscSchoolName: "",
@@ -33,7 +32,7 @@ const EditEducation = () => {
         degreeCollegeName: "",
         degreeMarks: "",
     });
-
+    
     const hscOptions = [
         {
             label: "Arts",
@@ -352,7 +351,7 @@ const EditEducation = () => {
                 },
             });
             const data = response.data.result;
-            setSchoolData(data)
+            schoolDataRef.current = data;
         } catch (error) {
             toast({
                 position: 'top',
@@ -376,7 +375,7 @@ const EditEducation = () => {
                 },
             });
             const data = response.data.result;
-            setCollegeData(data)
+            collegeDataRef.current = data;
         } catch (error) {
             toast({
                 position: 'top',
@@ -400,7 +399,7 @@ const EditEducation = () => {
                 },
             });
             const data = response.data.result;
-            setStreamData(data)
+            streamDataRef.current = data;
         } catch (error) {
             toast({
                 position: 'top',
@@ -419,14 +418,6 @@ const EditEducation = () => {
         fetchStream();
         // eslint-disable-next-line
     }, []);
-
-    useEffect(() => {
-        if (credentials.qualification.length !== 0) {
-            setQualificationSelected(true);
-        } else {
-            setQualificationSelected(false);
-        }
-    }, [credentials.qualification])
 
     if (loadCompleted) {
         return (
@@ -452,7 +443,7 @@ const EditEducation = () => {
 
                     <br />
 
-                    {qualificationSelected && <>
+                    {credentials.qualification.length !== 0 && <>
                         {/* SSC details */}
                         <Box boxShadow='xs' borderRadius={8} p='14px 12px'>
                             <Box fontFamily='var(--semiBold-font)'>
@@ -467,7 +458,7 @@ const EditEducation = () => {
                                     value: credentials.sscSchoolName,
                                     setCredentials: setCredentials,
                                     credentials: credentials,
-                                    data: schoolData
+                                    data: schoolDataRef.current
                                 }} />
 
                                 <RightIconNumberInput props={{
@@ -510,7 +501,7 @@ const EditEducation = () => {
                                     value: credentials.hscCollegeName,
                                     setCredentials: setCredentials,
                                     credentials: credentials,
-                                    data: collegeData
+                                    data: collegeDataRef.current
                                 }} />
 
                                 <RightIconNumberInput props={{
@@ -541,7 +532,7 @@ const EditEducation = () => {
                                     value: credentials.diplomaStream,
                                     setCredentials: setCredentials,
                                     credentials: credentials,
-                                    data: streamData
+                                    data: streamDataRef.current
                                 }} />
 
                                 <SuggestionInput props={{
@@ -552,7 +543,7 @@ const EditEducation = () => {
                                     value: credentials.diplomaCollegeName,
                                     setCredentials: setCredentials,
                                     credentials: credentials,
-                                    data: collegeData
+                                    data: collegeDataRef.current
                                 }} />
 
                                 <RightIconNumberInput props={{
@@ -583,7 +574,7 @@ const EditEducation = () => {
                                     value: credentials.degreeStream,
                                     setCredentials: setCredentials,
                                     credentials: credentials,
-                                    data: streamData
+                                    data: streamDataRef.current
                                 }} />
 
                                 <SuggestionInput props={{
@@ -594,7 +585,7 @@ const EditEducation = () => {
                                     value: credentials.degreeCollegeName,
                                     setCredentials: setCredentials,
                                     credentials: credentials,
-                                    data: collegeData
+                                    data: collegeDataRef.current
                                 }} />
 
                                 <RightTextNumberInput props={{

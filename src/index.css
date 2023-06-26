@@ -74,6 +74,19 @@
 	color: #5B00FF !important;
 }
 
+.zeptical-original-empty-button {
+	background-color: #fff !important;
+	border: 1px solid #5B00FF !important;
+	color: #5B00FF !important;
+	font-family: var(--bold-font) !important;
+}
+
+.zeptical-original-empty-button:hover {
+	border: 1px solid #5B00FF !important;
+	background-color: #5B00ff !important;
+	color: #fff !important;
+}
+
 .input-focus:focus {
 	border: 1px solid #5B00FF !important;
 	box-shadow: 0 0 0 1px #5B00FF !important;

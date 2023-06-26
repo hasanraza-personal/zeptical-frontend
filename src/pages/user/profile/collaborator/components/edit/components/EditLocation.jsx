@@ -1,7 +1,6 @@
-import { Box, Button, Container, Stack, VStack, useMediaQuery, useToast } from '@chakra-ui/react';
+import { Box, Button, Container, Stack, useMediaQuery, useToast } from '@chakra-ui/react';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import TextInput from '../../../../../../../components/inputFields/textInput/TextInput';
 import SystemLoader from '../../../../../../../components/loader/systemLoader/SystemLoader';
 import { useNavigate } from 'react-router-dom';
 import SuggestionInput from '../../../../../../../components/inputFields/suggestionInput/SuggestionInput';

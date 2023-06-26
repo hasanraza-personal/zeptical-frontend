@@ -15,8 +15,12 @@ const Header = () => {
     const [mobileScreen] = useMediaQuery('(max-width: 850px)');
     const { isOpen: isSideDrawerOpen, onOpen: openSideDrawer, onClose: closeSideDrawer } = useDisclosure();
     const location = useLocation();
-    // console.log('location: ', location.pathname);
     const globalUser = useSelector((state) => state.user.value);
+    let locationArr = [
+        "/user/createcollaborator"
+    ];
+    const locationPathName = location.pathname;
+    const locationFound = locationArr.includes(locationPathName);
 
     let currentLocation = [
         "/",
@@ -49,17 +53,19 @@ const Header = () => {
                     {!mobileScreen && !user ? <>
                         <TopNavbar />
                     </> : <>
-                        <Flex gap={3}>
-                            {user &&
-                                // Message
-                                <TopMobileNavbar />
-                            }
-                            <Icon as={List} className={styles.list_icon} onClick={openSideDrawer} />
-                        </Flex>
-                        <SideDrawer props={{
-                            isSideDrawerOpen,
-                            closeSideDrawer
-                        }} />
+                        {!locationFound && <>
+                            <Flex gap={3}>
+                                {user &&
+                                    // Message
+                                    <TopMobileNavbar />
+                                }
+                                <Icon as={List} className={styles.list_icon} onClick={openSideDrawer} />
+                            </Flex>
+                            <SideDrawer props={{
+                                isSideDrawerOpen,
+                                closeSideDrawer
+                            }} />
+                        </>}
                     </>}
 
                 </Flex>
